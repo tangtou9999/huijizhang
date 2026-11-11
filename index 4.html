@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>慧记账</title>
+<style>
+:root{--bg:#f3f5fb;--pn:#fff;--tx:#141a33;--mu:#7b84a3;--ln:#e6e9f3;--ac:#5b4bff;--sd:0 6px 22px rgba(40,50,110,.08);--nv:rgba(255,255,255,.92);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1022;--pn:#151b36;--tx:#eaeeff;--mu:#8b94bb;--ln:#232b4d;--ac:#7c6cff;--sd:0 6px 22px rgba(0,0,0,.35);--nv:rgba(21,27,54,.92)}}
+:root[data-theme="dark"]{--bg:#0b1022;--pn:#151b36;--tx:#eaeeff;--mu:#8b94bb;--ln:#232b4d;--ac:#7c6cff;--sd:0 6px 22px rgba(0,0,0,.35);--nv:rgba(21,27,54,.92)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.5 -apple-system,"PingFang SC","Noto Sans SC","Microsoft YaHei",sans-serif;font-variant-numeric:tabular-nums}
+@keyframes fd{from{opacity:.2}to{opacity:1}}
+@keyframes up{from{transform:translateY(28px)}to{transform:none}}
+#v{max-width:560px;margin:0 auto;padding:14px 16px 112px}
+#v.fx{animation:fd .18s ease}
+.top{display:flex;justify-content:space-between;align-items:center;margin:2px 0 16px}
+.top>b{font-size:24px;font-weight:800;letter-spacing:.5px}
+.brand{display:flex;align-items:center;gap:10px}
+.brand b{font-size:22px;font-weight:800;letter-spacing:1px}
+.ico{width:36px;height:36px;border-radius:24%;object-fit:cover;box-shadow:0 4px 12px rgba(20,60,200,.3)}
+.mp{display:flex;align-items:center;background:var(--pn);border-radius:999px;padding:3px;box-shadow:var(--sd)}
+.mp button{width:32px;height:32px;border:0;border-radius:50%;background:transparent;color:var(--tx);font-size:19px}
+.mp span{font-size:14px;font-weight:600;padding:0 4px}
+.hero{background:linear-gradient(150deg,#161d4d,#3a2f96 62%,#5b4bff);color:#fff;border-radius:26px;padding:22px 20px;margin-bottom:16px;box-shadow:0 16px 36px rgba(60,46,160,.35)}
+.hero small{opacity:.72;font-size:13px}
+.big{font-size:40px;font-weight:800;line-height:1.15;letter-spacing:.5px;margin:2px 0 4px}
+.hero .chp{display:inline-block;background:rgba(255,255,255,.16);border-radius:999px;padding:2px 12px;font-size:12px}
+.hr{display:flex;align-items:center;gap:18px;margin-top:18px}
+.hr svg{flex:none;width:122px;height:122px}
+.hl{flex:1;min-width:0}
+.hl div{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:14px}
+.hl i{width:9px;height:9px;border-radius:50%;flex:none}
+.hl span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hl b{font-weight:600}
+.qa{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.qa button{border:0;border-radius:20px;background:var(--pn);box-shadow:var(--sd);padding:14px 4px 12px;color:var(--tx);font:inherit;font-size:13px;display:flex;flex-direction:column;align-items:center;gap:8px;transition:transform .1s}
+.qa button:active{transform:scale(.96)}
+.qa i{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;color:#fff}
+.tl{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.tl div{background:var(--pn);border-radius:20px;box-shadow:var(--sd);padding:14px 14px 14px 18px;position:relative;overflow:hidden}
+.tl div:before{content:"";position:absolute;left:0;top:16px;bottom:16px;width:4px;border-radius:0 4px 4px 0;background:var(--c)}
+.tl small{color:var(--mu);font-size:12px;display:block}
+.tl b{font-size:22px;display:block;line-height:1.3}
+.note{color:var(--mu);font-size:12px;margin:0 4px 16px}
+.pn{display:block;background:var(--pn);border-radius:22px;box-shadow:var(--sd);padding:18px 16px;margin-bottom:16px}
+.pn h3{margin:0 0 12px;font-size:17px;display:flex;align-items:center;gap:8px}
+.db{display:flex;align-items:center;gap:12px;background:rgba(255,107,107,.1);border:1px solid rgba(255,107,107,.3);border-radius:20px;padding:14px;margin-bottom:16px}
+.db .di{width:38px;height:38px;border-radius:50%;background:#ff6b6b;color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.db>div:nth-child(2){flex:1}
+.acc{padding:0;overflow:hidden}
+.acc .ah{display:flex;justify-content:space-between;align-items:center;padding:16px}
+.acc .ah h3{margin:0}
+.acc .ah span{color:var(--mu);font-size:20px;transition:transform .2s}
+.acc .ab{display:none;padding:0 16px 16px}
+.acc.open .ab{display:block}.acc.open .ah span{transform:rotate(90deg)}
+.mu{color:var(--mu)}
+.lb{font-size:12px;color:var(--mu);margin:0 0 6px 2px}
+.emp{text-align:center;padding:28px 0;color:var(--mu)}
+.emp i{font-size:40px;font-style:normal;display:block;margin-bottom:6px;opacity:.85}
+.emp p{margin:0;font-size:14px}
+@keyframes g{from{stroke-dasharray:0 300}}
+circle.sg{animation:g .9s ease}
+@media(prefers-reduced-motion:reduce){circle.sg{animation:none}}
+.bl{font-size:10px;fill:var(--mu);text-anchor:middle}
+.st{display:grid;grid-template-columns:repeat(4,1fr);text-align:center;gap:4px}
+.st small{display:block;color:var(--mu);font-size:12px}.st b{font-size:17px}
+.neg{color:#ff6b6b}.pos{color:#19c9a8}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.chip{border:1.5px solid var(--c);color:var(--c);background:transparent;border-radius:999px;padding:7px 16px;font-size:14px;font-weight:500}
+.chip.on{background:var(--c);color:#fff}
+.seg{display:flex;margin-bottom:14px;background:var(--bg);border-radius:14px;padding:4px}
+.seg button{flex:1;border:0;background:transparent;color:var(--mu);padding:9px 4px;font:inherit;font-weight:600;border-radius:11px}
+.seg button.on{background:var(--pn);color:var(--ac);box-shadow:0 2px 8px rgba(40,50,110,.12)}
+.seg button.on.due{color:#ff6b6b}
+.row{display:flex;gap:8px;margin-bottom:12px}
+.row>input,.row>select{flex:1 1 0;width:0}
+input,textarea,select{width:100%;min-width:0;min-height:46px;background:var(--bg);color:var(--tx);border:1.5px solid transparent;border-radius:14px;padding:11px 13px;font:inherit}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--ac)}
+textarea{height:100px;font-size:12px;margin:8px 0 10px}
+.btn{width:100%;border:0;border-radius:16px;padding:14px;font-size:16px;font-weight:700;color:#fff;background:linear-gradient(135deg,#5b4bff,#7b5cff);box-shadow:0 8px 20px rgba(91,75,255,.35)}
+.btn2{border:0;border-radius:14px;padding:0 18px;white-space:nowrap;background:var(--bg);color:var(--tx);font:inherit;font-weight:600;min-height:46px}
+.lr{display:grid;grid-template-columns:12px 1fr auto auto;gap:4px 8px;align-items:center;padding:8px 0}
+.lr i{width:10px;height:10px;border-radius:50%}
+.lr em{font-style:normal;color:var(--mu);text-align:right;white-space:nowrap}
+.lr u{grid-column:1/-1;height:5px;border-radius:5px;background:linear-gradient(90deg,var(--c) var(--w),var(--ln) var(--w))}
+.it{display:grid;grid-template-columns:38px 1fr auto 10px;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--ln)}
+.it:last-child{border:0}
+.av{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;color:#fff;font-weight:700;background:var(--c)}
+.ib{min-width:0}.ib b{display:block}
+.ib small{display:block;color:var(--mu);font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dh{display:flex;justify-content:space-between;color:var(--mu);font-size:13px;font-weight:600;padding:14px 0 4px}
+.mc{border:1px solid var(--ln);border-radius:18px;padding:14px;margin-bottom:10px}
+.mc .mh{display:flex;justify-content:space-between;margin-bottom:10px}
+.m4{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px}
+.m4 small{display:block;color:var(--mu);font-size:12px}.m4 b{font-size:17px}
+.x{border:0;background:transparent;color:var(--mu);font-size:13px;padding:6px 8px}
+.tip{padding:12px 0;border-bottom:1px solid var(--ln)}.tip:last-child{border:0}
+.kv{display:flex;justify-content:space-between;align-items:center;padding:8px 0}
+.kv input{text-align:right}
+.mi{display:grid;grid-template-columns:34px 1fr;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--ln)}
+.mi:last-child{border:0}
+.mi.dn{padding:5px 0;gap:10px;grid-template-columns:26px 1fr;font-size:14px}
+.mi.dn .ck{width:24px;height:24px;font-size:12px;background:var(--ac);color:#fff}
+.ck{width:30px;height:30px;border-radius:50%;border:2px solid var(--ac);background:transparent;color:var(--ac);font-size:15px}
+.tg{display:inline-block;background:rgba(91,75,255,.12);color:var(--ac);border-radius:8px;padding:0 8px;font-size:12px;margin-right:6px}
+.cx{display:inline-flex;align-items:center;gap:8px;background:var(--bg);border-radius:999px;padding:6px 8px 6px 14px;font-size:14px}
+.cx b{width:20px;height:20px;border-radius:50%;background:var(--ln);color:var(--mu);display:grid;place-items:center;font-size:14px}
+.mg{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:12px 0}
+.mg button{border:0;border-radius:12px;background:var(--bg);color:var(--tx);padding:12px 0;font:inherit;font-weight:600}
+.mg button.on{background:var(--ac);color:#fff}
+.lk{color:var(--ac);text-decoration:underline;padding:4px 2px}
+.hname{font-size:30px;font-weight:800;margin:4px 0 14px}
+[data-open],[data-a]{cursor:pointer}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--pn);border-top:1px solid var(--ln);padding-bottom:env(safe-area-inset-bottom,0px);z-index:9999}
+nav button{flex:1;min-width:0;border:0;background:transparent;color:var(--mu);padding:8px 0 6px;font:inherit;font-size:12px}
+nav i{display:grid;place-items:center;width:54px;height:30px;border-radius:15px;margin:0 auto 2px}
+nav button.on{color:var(--ac);font-weight:700}
+nav button.on i{background:rgba(91,75,255,.14)}
+#sh{position:fixed;inset:0;background:rgba(10,14,40,.5);display:none;align-items:flex-end;z-index:10000}
+#sh.on{display:flex}
+#sh>div{background:var(--pn);width:100%;max-width:560px;margin:0 auto;border-radius:26px 26px 0 0;padding:12px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:92%;overflow:auto;animation:up .25s ease}
+#sh>div:before{content:"";display:block;width:40px;height:4px;border-radius:2px;background:var(--ln);margin:0 auto 14px}
+#sh h3{margin:0 0 12px;font-size:18px}
+#ts{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:10px 20px;border-radius:999px;font-size:14px;opacity:0;transition:opacity .25s;pointer-events:none;white-space:nowrap;z-index:21000}
+#ts.s{opacity:1}#ts.u{pointer-events:auto}#ts .lk{color:inherit;font-weight:700}
+.cb{display:flex;margin-bottom:10px}.cb.me{justify-content:flex-end}
+.cb>div{max-width:82%;padding:10px 13px;border-radius:18px;background:var(--pn);box-shadow:var(--sd);white-space:pre-wrap;word-break:break-word}
+.cb.me>div{background:var(--ac);color:#fff}
+.cin{position:fixed;left:0;right:0;bottom:calc(66px + env(safe-area-inset-bottom,0px));z-index:9000;background:var(--bg);padding:8px 16px}
+.cin>div{max-width:560px;margin:0 auto;display:flex;gap:8px}
+.ad{border-radius:20px;background:var(--pn);box-shadow:var(--sd);padding:14px 16px;margin-bottom:12px}
+.ad.adt{background:linear-gradient(135deg,#ff9a3d,#ff6b6b);color:#fff}.adt .mu{color:rgba(255,255,255,.88)}.adt .tg{background:rgba(255,255,255,.22);color:#fff}
+.tg.u{background:rgba(255,107,107,.15);color:#ff6b6b}
+#lg{position:fixed;inset:0;z-index:20000;background:var(--bg);overflow:auto}
+</style>
+</head>
+<body>
+<div id="v"></div>
+<nav></nav>
+<div id="sh"></div>
+<div id="ts"></div>
+<script>
+const APP='慧记账',VER='1.15.0',TEL='13685206466',ICON='data:image/jpeg;base64,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';
+document.head.insertAdjacentHTML('beforeend','<link rel="icon" href="'+ICON+'"><link rel="apple-touch-icon" href="'+ICON+'">');
+const K=(()=>{const p=PL();return p.s?'pl_v2_'+p.s:'pl_v2'})(),CL=['#7c6cff','#19d3c5','#ff6b6b','#ffb84d','#7be495','#ff7eb6','#4da3ff','#c4a1ff'],CR='#19d3c5',CB='#7c6cff',CE='#ffb84d',DEFX=['采购','活动','工资','房租','电费','水费','网费','其他'],DEFM=['采购','活动','其他'],PAY=['wx','ali','cash'],PAID=['wx','ali','cash','bank'],
+IC={home:'<path d="M3 11l9-8 9 8"/><path d="M5 9.5V20h14V9.5"/>',edit:'<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/>',pin:'<path d="M5 3h14v18l-7-4-7 4z"/>',set:'<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',trend:'<path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/>',box:'<path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8"/>',chat:'<path d="M21 12a8 8 0 01-11.6 7.1L4 20l1-4.6A8 8 0 1121 12z"/>',shop:'<path d="M4 9l1.5-5h13L20 9"/><path d="M4 9a2.7 2.7 0 005.3 0 2.7 2.7 0 005.4 0A2.7 2.7 0 0020 9"/><path d="M5 12v8h14v-8"/>',wallet:'<rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 15h2"/>'},
+ic=(n,s=22)=>`<svg viewBox="0 0 24 24" width="${s}" height="${s}" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+let FIRST=false,D={sup:[],rev:{},buy:[],exp:[],memo:[],lb:'',xcats:[...DEFX],mcats:[...DEFM]},tab='h',sub='e',tp='b',meth='wx',xc='采购',sel='',mc='采购',fr='30',fa='',fb='',ft='all',fs='',lim=40,UD=null,E=null;const OP={};
+try{const s=localStorage.getItem(K);if(s){const j=JSON.parse(s);if(j&&Array.isArray(j.sup)&&Array.isArray(j.buy)&&Array.isArray(j.exp)&&j.rev)D=j}else FIRST=true}catch(x){FIRST=true}
+const mig=()=>{D.memo=D.memo||[];mig2();D.xcats=D.xcats||[...DEFX];D.mcats=D.mcats||[...DEFM];D.buy.forEach(r=>{if(r.k==='r'||r.k==='p')r.q=0;if(r.m==='bal'||r.m==='due')r.m='none';delete r.k});D.exp.forEach(r=>{if(r.k==='w'&&!r.c)r.c='工资';delete r.k})};mig();
+const $=i=>document.getElementById(i),
+save=()=>{try{localStorage.setItem(K,JSON.stringify(D))}catch(x){}},
+f=n=>(+(+n).toFixed(2)).toLocaleString('zh-CN'),
+esc=s=>String(s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])),
+p2=n=>String(n).padStart(2,'0'),
+ago=n=>{const d=new Date();d.setDate(d.getDate()-n);return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())},
+today=()=>ago(0),
+cc=n=>CL[D.sup.findIndex(s=>s.n===n)%CL.length]||'#999',
+sum=a=>a.reduce((t,x)=>t+x.a,0),
+ld=m=>m+'-'+p2(new Date(+m.slice(0,4),+m.slice(5),0).getDate());
+let cd=today(),ym=cd.slice(0,7);
+function sh(m,k){let y=+m.slice(0,4),o=+m.slice(5)+k;while(o>12){o-=12;y++}while(o<1){o+=12;y--}return y+'-'+p2(o)}
+function M(m){const o={rev:0,ex:0,b:0,q:0,by:{},bq:{}};for(const d in D.rev)if(d.slice(0,7)===m)o.rev+=D.rev[d];D.buy.forEach(r=>{if(r.d.slice(0,7)===m){o.by[r.s]=(o.by[r.s]||0)+r.a;o.bq[r.s]=(o.bq[r.s]||0)+(r.q||0);o.b+=r.a;o.q+=r.q||0}});D.exp.forEach(r=>{if(r.d.slice(0,7)===m)o.ex+=r.a});return o}
+const MN={wx:'微信',ali:'支付宝',cash:'现金',bank:'转账',none:'未付','?':'未记方式'},mt=r=>r.m||'?',NW='日一二三四五六',
+owe=n=>sum(D.buy.filter(r=>r.s===n&&r.m==='none')),
+months=()=>[...new Set([...Object.keys(D.rev),...D.buy.map(r=>r.d),...D.exp.map(r=>r.d)].map(d=>d.slice(0,7)))].sort(),
+sg=v=>(v<0?'−':'')+f(Math.abs(v)),
+nowHM=()=>{const d=new Date();return p2(d.getHours())+':'+p2(d.getMinutes())},
+fts=t=>{const d=new Date(t);return p2(d.getMonth()+1)+'-'+p2(d.getDate())+' '+p2(d.getHours())+':'+p2(d.getMinutes())},
+wd=d=>'周'+NW[new Date(d+'T00:00:00').getDay()],
+cdn=d=>{const n=Math.round((new Date(d+'T00:00:00')-new Date(today()+'T00:00:00'))/864e5);return n===0?'今天':n>0?n+' 天后':'已过 '+(-n)+' 天'},
+mch=()=>PAY.concat('none').map(k=>`<button class="${k===meth?'on':''}${k==='none'?' due':''}" data-m="${k}">${MN[k]}</button>`).join(''),
+xmch=()=>PAY.concat('none').map(k=>`<button class="${k===E.m?'on':''}${k==='none'?' due':''}" data-em="${k}">${MN[k]}</button>`).join(''),
+acc=(k,t,b)=>`<div class="pn acc${OP[k]?' open':''}"><div class="ah" data-a="tgl" data-k="${k}"><h3>${t}</h3><span>›</span></div><div class="ab">${b}</div></div>`;
+function toast(t,u){const e=$('ts');e.innerHTML=esc(t)+(u?' <a class="lk" id="ud">撤销</a>':'');e.classList.add('s');e.classList.toggle('u',!!u);clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('s'),u?6000:2200)}
+function cpy(t){const a=document.createElement('textarea');a.value=t;a.style.cssText='position:fixed;opacity:0';document.body.appendChild(a);a.select();let ok=false;try{ok=document.execCommand('copy')}catch(x){}a.remove();return ok}
+function tips(m,o){const L=[],pm=M(sh(m,-1));
+ if(o.rev>0&&o.b>0)L.push(`本月进货占营业额 ${(o.b/o.rev*100).toFixed(0)}%`+(pm.rev>0&&pm.b>0?`，上月是 ${(pm.b/pm.rev*100).toFixed(0)}%。`:'。'));
+ D.sup.forEach(s=>{if(s.g>0&&o.b>0){const a=o.by[s.n]||0,gap=s.g/100*o.b-a;if(gap>o.b*.05)L.push(`${s.n} 现在占 ${(a/o.b*100).toFixed(0)}%，目标 ${s.g}%，按本月总额还可多进约 ${f(gap)}。`)}});
+ const dd=Object.keys(D.rev).filter(d=>d.slice(0,7)===m);
+ if(m===today().slice(0,7)&&dd.length>=7)L.push(`按本月已记的日均 ${f(o.rev/dd.length)}，整月营业额约 ${f(o.rev/dd.length*+ld(m).slice(8))}。`);
+ const w={};Object.keys(D.rev).filter(d=>d>ago(90)).forEach(d=>{const k=new Date(d+'T00:00:00').getDay();(w[k]=w[k]||[]).push(D.rev[d])});
+ const av=Object.entries(w).filter(e=>e[1].length>=2).map(e=>[+e[0],e[1].reduce((a,b)=>a+b,0)/e[1].length]).sort((a,b)=>b[1]-a[1]);
+ if(av.length>=4)L.push(`近 90 天周${NW[av[0][0]]}营业额最高（均 ${f(av[0][1])}），周${NW[av[av.length-1][0]]}最低（均 ${f(av[av.length-1][1])}），进货可以参考这个节奏。`);
+ return L}
+function remind(){const L=[],now=new Date(),td=today();
+ D.memo.filter(m=>!m.x&&m.d&&m.d<=ago(-7)).sort((a,b)=>a.d.localeCompare(b.d)).forEach(m=>L.push(`<div class="tip" data-a="gt" data-t="m">📌 ${esc(m.t)}（${m.d.slice(5)}，${cdn(m.d)}） ›</div>`));
+ if(realN()>=5&&(!D.lb||D.lb<ago(7)))L.push(`<div class="tip" data-a="gt" data-t="d">${D.lb?'已超过 7 天没备份数据':'还没有备份过数据'}，点这里去备份 ›</div>`);
+ D.sup.forEach(s=>{const rs=D.buy.filter(r=>r.s===s.n&&r.d>ago(60)&&r.d<td);if(rs.length<3||D.buy.some(r=>r.s===s.n&&r.d===td))return;const w={};rs.forEach(r=>{const k=new Date(r.d+'T00:00:00').getDay();w[k]=(w[k]||0)+1});if((w[now.getDay()]||0)>=2)L.push(`<div class="tip" data-a="pick" data-n="${esc(s.n)}">${esc(s.n)} 通常周${NW[now.getDay()]}送货，今天还没记进货。点这里去记 ›</div>`)});
+ return L.length?`<div class="pn"><h3>待办事项</h3>${L.join('')}</div>`:''}
+function rowsOf(a,z,t,s){const R=[],inr=d=>d>=a&&d<=z;
+ if(t==='all'||t==='in'||t==='due')D.buy.forEach(r=>{if(!inr(r.d)||(s&&r.s!==s)||(t==='due'&&r.m!=='none'))return;R.push({k:'b',id:r.id,d:r.d,tm:r.at?r.at.slice(11):'',l:r.s,q:r.q||0,m:mt(r),pd:PAID.includes(r.m)?r.a:0,s:(r.q?r.q+' 箱 · ':r.n?r.n+(r.u||'')+' · ':'')+(r.it&&r.it.length?r.it.length+' 样 · ':'')+MN[mt(r)]+(r.pa?' · 付款 '+r.pa.slice(5).replace('T',' '):'')+(r.t?' · '+r.t:''),a:r.a,c:cc(r.s)})});
+ if(t==='e')D.exp.forEach(r=>{if(inr(r.d))R.push({k:'e',id:r.id,d:r.d,tm:'',l:r.c||r.t,s:r.c?(r.t||''):'',a:r.a,c:CE})});
+ if(t==='all'||t==='v')Object.keys(D.rev).forEach(d=>{if(inr(d)&&!s)R.push({k:'v',id:d,d,tm:'',l:'营业额',s:'当天营业额',a:D.rev[d],c:CR})});
+ return R.sort((x,y)=>(y.d+y.tm).localeCompare(x.d+x.tm))}
+const rh=i=>`<div class="it" data-open="${i.k}:${esc(String(i.id))}"><div class="av" style="--c:${i.c}">${i.k==='v'?ic('trend',18):i.k==='e'?ic('wallet',18):esc([...i.l][0]||'')}</div><div class="ib"><b>${esc(i.l)}</b><small>${i.tm?i.tm+' · ':''}${esc(i.s)}</small></div><strong class="${i.m==='none'?'neg':''}">${f(i.a)}</strong><span class="mu">›</span></div>`;
+function vH(){
+ const o=M(ym),sp=D.sup,T=o.b,net=o.rev-o.b-o.ex,R=44,C=2*Math.PI*R,dbt=sp.map(s=>owe(s.n)).filter(x=>x>0);let off=0,sv='';
+ sp.filter(s=>o.by[s.n]>0).forEach(s=>{const l=o.by[s.n]/T*C;sv+=`<circle class="sg" r="${R}" cx="55" cy="55" fill="none" stroke="${cc(s.n)}" stroke-width="13" stroke-dasharray="${Math.max(l-2,.1)} ${C}" stroke-dashoffset="${-off}" transform="rotate(-90 55 55)"/>`;off+=l});
+ const ms=[-5,-4,-3,-2,-1,0].map(k=>sh(ym,k)),dt=ms.map(M),mx=Math.max(1,...dt.map(o=>Math.max(o.rev,o.b,o.ex)));let bs=`<text x="8" y="12" class="bl" style="text-anchor:start">${f(mx)}</text>`;
+ [0,.5,1].forEach(g=>{const y=132-g*104;bs+=`<line x1="8" x2="324" y1="${y}" y2="${y}" stroke="var(--ln)"/>`});
+ ms.forEach((m,i)=>{const x=14+i*52,op=i<5?.68:1;[[dt[i].rev,CR],[dt[i].b,CB],[dt[i].ex,CE]].forEach((p,j)=>{const h=p[0]/mx*104;if(h>0)bs+=`<rect x="${x+j*14}" y="${132-h}" width="11" height="${h}" rx="3" fill="${p[1]}" opacity="${op}"><title>${f(p[0])}</title></rect>`});bs+=`<text class="bl" x="${x+18}" y="150" style="${i===5?'fill:var(--tx);font-weight:700':''}">${+m.slice(5)}月</text>`});
+ const L=tips(ym,o),all=months(),rc=[...rowsOf('0000-01-01','9999-12-31','all'),...rowsOf('0000-01-01','9999-12-31','e')].sort((x,y)=>(y.d+y.tm).localeCompare(x.d+x.tm)).slice(0,5);
+ const mcards=all.length?[...all].reverse().map(m=>{const q=M(m),n=q.rev-q.b-q.ex;return `<div class="mc" data-a="gm" data-mo="${m}"><div class="mh"><b>${m.slice(0,4)}年${+m.slice(5)}月</b><span class="mu">查看 ›</span></div><div class="m4"><div><small>营业额</small><b>${f(q.rev)}</b></div><div><small>进货</small><b>${f(q.b)}</b>${q.q?`<span class="mu" style="font-size:12px"> ${f(q.q)} 箱</span>`:''}</div><div><small>开销</small><b>${f(q.ex)}</b></div><div><small>现金流</small><b class="${n<0?'neg':'pos'}">${sg(n)}</b></div></div></div>`}).join(''):'<div class="emp"><i>📭</i><p>还没有月份记录</p></div>';
+ const tl=(n,v,c,cl,a)=>`<div style="--c:${c}"${a?` data-a="gq" data-t="${a}"`:''}><small>${n}${a?' ›':''}</small><b class="${cl||''}">${v}</b></div>`;
+ return `<div class="top"><div class="brand"><img class="ico" src="${ICON}" alt=""><b>${APP}</b></div><div class="mp"><button data-a="pm">‹</button><span data-a="mpick">${ym.slice(0,4)}年${+ym.slice(5)}月 ▾</span><button data-a="nm">›</button></div></div>
+${hasDm()?`<div class="db" style="background:rgba(91,75,255,.1);border-color:rgba(91,75,255,.3)" data-a="dmask"><div class="di" style="background:var(--ac)">i</div><div><b>现在是示例数据</b><div class="mu" style="font-size:12px">用来演示功能。点这里清除，开始记你自己的账</div></div><span class="mu">›</span></div>`:''}${shopCard()}<div class="hero"><small>本月进货</small><div class="big">${f(T)}</div>${o.rev>0&&T>0?`<span class="chp">进货率 ${(T/o.rev*100).toFixed(0)}%</span>`:'<span class="chp">'+(sp.length?'还没有进货记录':'先到“设置”添加供货商')+'</span>'}
+<div class="hr"><svg viewBox="0 0 110 110"><circle r="${R}" cx="55" cy="55" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="13"/>${sv}<text x="55" y="56" text-anchor="middle" font-size="19" font-weight="800" fill="#fff">${o.q?f(o.q):sp.length}</text><text x="55" y="70" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.7)">${o.q?'箱':'家供货商'}</text></svg><div class="hl">${sp.length?sp.map(s=>{const v=o.by[s.n]||0;return `<div data-a="gs" data-n="${esc(s.n)}" data-mo="${ym}"><i style="background:${cc(s.n)}"></i><span>${esc(s.n)}</span><b>${T?(v/T*100).toFixed(0):0}%</b></div>`}).join(''):''}</div></div></div>
+<div class="qa"><button data-qt="v"><i style="background:linear-gradient(135deg,#19d3c5,#12a8b8)">${ic('trend')}</i>记营业额</button><button data-qt="b"><i style="background:linear-gradient(135deg,#7c6cff,#5b4bff)">${ic('box')}</i>记进货</button><button data-qt="e"><i style="background:linear-gradient(135deg,#ffb84d,#f08a24)">${ic('wallet')}</i>记开销</button></div>
+<div class="tl">${tl('营业额',f(o.rev),CR,'','v')}${tl('进货',f(o.b),CB,'','in')}${tl('开销',f(o.ex),CE,'','e')}${tl('现金流',sg(net),net<0?'#ff6b6b':'#19c9a8',net<0?'neg':'pos')}</div>
+<div class="note">现金流＝营业额−进货−开销。进的货可能还在仓库里，所以它不是利润。</div>
+${dbt.length?`<div class="db" data-a="debt" data-n=""><div class="di">!</div><div><b>欠款 ${f(dbt.reduce((t,x)=>t+x,0))}</b><div class="mu" style="font-size:12px">${dbt.length} 家供货商还没付，点开看是哪几笔</div></div><span class="mu">›</span></div>`:''}
+${homeButler()}${homeGf()}${adStrip()}${memoBtn()}
+<div class="pn"><h3>各家对比</h3>${sp.length?sp.map(s=>{const v=o.by[s.n]||0,q=T?v/T*100:0,k=o.bq[s.n]||0,ow=owe(s.n);return `<div class="lr" data-a="gs" data-n="${esc(s.n)}" data-mo="${ym}"><i style="background:${cc(s.n)}"></i><span>${esc(s.n)} ›</span><b>${f(v)}</b><em>${q.toFixed(1)}%${s.g?' / 目标'+s.g+'%':''}</em><u style="--w:${q}%;--c:${cc(s.n)}"></u>${k||ow?`<small class="mu" style="grid-column:1/-1">${k?f(k)+' 箱 · 每箱均价 '+f(v/k):''}${ow?`<span class="neg" data-a="debt" data-n="${esc(s.n)}" style="margin-left:8px;text-decoration:underline">欠 ${f(ow)} ›</span>`:''}</small>`:''}</div>`}).join(''):'<div class="emp"><i>📦</i><p>还没有供货商，请先去系统添加</p></div>'}${o.q?`<div class="mu" style="font-size:13px;margin-top:10px;text-align:center">本月共进 ${f(o.q)} 箱</div>`:''}</div>
+${itemPn()}<div class="pn"><h3>近 6 个月</h3><svg viewBox="0 0 332 158" style="width:100%">${bs}</svg><div class="mu" style="font-size:12px;display:flex;gap:16px;justify-content:center;margin-top:4px"><span><i class="dot" style="background:${CR}"></i> 营业额</span><span><i class="dot" style="background:${CB}"></i> 进货</span><span><i class="dot" style="background:${CE}"></i> 开销</span></div></div>
+<div class="pn"><h3>最近记录</h3>${rc.length?rc.map(rh).join(''):'<div class="emp"><i>📭</i><p>还没有记录</p></div>'}<a class="lk" data-a="hist" style="display:block;margin-top:10px">查看全部 ›</a></div>
+${acc('m1','每月汇总',mcards)}
+${acc('tip','经营提示',L.length?L.map(t=>`<div class="tip">${t}</div>`).join(''):'<p class="mu" style="margin:0">多记几天营业额和进货，这里会给出进货率、各家占比和生意规律的提示。</p>')}`}
+function dayH(){const L=[...rowsOf(cd,cd,'all'),...rowsOf(cd,cd,'e')],v=D.rev[cd],bs=D.buy.filter(x=>x.d===cd);
+ return `<h3>${cd.slice(5)} ${wd(cd)} 的记录</h3><div class="st" style="grid-template-columns:repeat(3,1fr)"><div><small>营业额</small><b>${v==null?'-':f(v)}</b></div><div><small>进货</small><b>${f(sum(bs))}</b></div><div><small>箱数</small><b>${f(bs.reduce((t,x)=>t+(x.q||0),0))}</b></div></div><div style="margin-top:6px">${L.length?L.map(rh).join(''):'<div class="emp" style="padding:16px 0"><i>☕️</i><p>这一天还没有记录。点一条记录可以查看详情、修改</p></div>'}</div>`}
+function formH(){
+ if(!D.sup.some(s=>s.n===sel))sel=D.sup[0]?D.sup[0].n:'';
+ if(!D.xcats.includes(xc))xc=D.xcats[0]||'其他';
+ if(tp==='b'&&meth==='bank')meth='wx';
+ const dr=`<div class="lb">${tp==='b'?'日期和时间（实际收货或付款的时间，晚上补记也填当时的）':'日期'}</div><div class="row"><input id="dt" type="date" value="${cd}">${tp==='b'?`<input id="bt" type="time" value="${nowHM()}">`:''}</div>`;
+ if(tp==='v'){const r=D.rev[cd];return dr+`<div class="lb">营业额</div><div class="row" style="margin:0"><input id="ba" type="number" inputmode="decimal" placeholder="${r==null?'这一天的营业额':'已记 '+f(r)+'，重新输入可修改'}"><button class="btn2" data-a="rev">保存</button></div>`}
+ if(tp==='e')return dr+`<div class="lb">类别</div><div class="chips">${D.xcats.map(c=>`<button class="chip${c===xc?' on':''}" style="--c:var(--ac)" data-x="${esc(c)}">${esc(c)}</button>`).join('')}</div><div class="row"><input id="ba" type="number" inputmode="decimal" placeholder="金额"><input id="bn" placeholder="备注（选填）"></div><button class="btn" data-a="exp">记录</button>`;
+ if(!D.sup.length)return dr+'<div class="emp"><i>📦</i><p>还没有供货商，先到“设置”页添加</p></div>';
+ return dr+`<div class="lb">供货商</div><div class="chips">${D.sup.map(s=>`<button class="chip${s.n===sel?' on':''}" style="--c:${cc(s.n)}" data-v="${esc(s.n)}">${esc(s.n)}</button>`).join('')}</div><div class="lb">金额 · 备注</div><div class="row"><input id="ba" type="number" inputmode="decimal" placeholder="金额"><input id="bn" placeholder="备注"></div><div class="lb">数量 · 单位</div><div class="row"><input id="bq" type="number" inputmode="decimal" placeholder="数量"><select id="bu">${UN.map(u=>`<option>${u}</option>`).join('')}</select></div><div class="lb">进货明细（选填，每行一样：品名 数量单位 单价）</div><textarea id="bd" placeholder="猪肉 20斤 30&#10;葱 10斤 1.5" style="height:84px;font-size:14px;margin:0 0 10px"></textarea><div class="lb">付款方式（未付＝先欠着，之后在“查账 › 欠款”里标记已付）</div><div class="seg" id="mc">${mch()}</div><button class="btn" data-a="buy">记录</button>`}
+function vE(){return `<div class="pn"><div class="seg" id="tp">${[['v','营业额'],['b','进货'],['e','开销']].map(x=>`<button data-tp="${x[0]}" class="${tp===x[0]?'on':''}">${x[1]}</button>`).join('')}</div><div id="fm">${formH()}</div></div><div class="pn" id="dl">${dayH()}</div>`}
+function vF(){
+ const td=today(),a=fr==='1'?td:fr==='7'?ago(6):fr==='30'?ago(29):fr==='m'?td.slice(0,7)+'-01':fr==='all'?'0000-01-01':(fa||ago(6)),z=fr==='c'?(fb||td):td,S=['all','in','due'].includes(ft)?fs:'',R=rowsOf(a,z,ft,S),G={},NL=String.fromCharCode(10);
+ R.forEach(i=>{if(i.k==='b'){const g=G[i.l]=G[i.l]||{a:0,q:0,p:0,o:0};g.a+=i.a;g.q+=i.q;g.p+=i.pd;if(i.m==='none')g.o+=i.a}});
+ const gk=Object.keys(G).sort((p,q)=>G[q].a-G[p].a),hs=!!S,byd={};R.forEach(i=>{(byd[i.d]=byd[i.d]||[]).push(i)});
+ let h='',shown=0;for(const d of Object.keys(byd).sort().reverse()){if(shown>=lim)break;const rs=byd[d],bq=rs.filter(i=>i.k==='b'),sq=bq.reduce((t,i)=>t+i.q,0);h+=`<div class="dh"><span>${d.slice(5)} ${wd(d)}</span><span>${bq.length?'进货 '+f(sum(bq))+(sq?' · '+f(sq)+' 箱':''):''}</span></div>`;rs.forEach(i=>{h+=rh(i);shown++})}
+ const rest=R.length-shown,op=(r,c)=>r.map(x=>`<option value="${x[0]}"${x[0]===c?' selected':''}>${x[1]}</option>`).join('');
+ let top;
+ if(ft==='e'){const by={};R.forEach(i=>{by[i.l]=(by[i.l]||0)+i.a});const tot=sum(R),ks=Object.keys(by).sort((p,q)=>by[q]-by[p]);
+  top=`<div class="pn"><h3>开销合计 ${f(tot)}</h3>${ks.length?ks.map(c=>`<div class="lr"><i style="background:${CE}"></i><span>${esc(c)}</span><b>${f(by[c])}</b><em>${(by[c]/tot*100).toFixed(0)}%</em><u style="--w:${by[c]/tot*100}%;--c:${CE}"></u></div>`).join(''):'<div class="emp"><i>💸</i><p>这个时间段没有开销</p></div>'}</div>`}
+ else if(ft==='due'){const tot=sum(R);top=`<div class="pn"><h3>欠款明细</h3><div class="st" style="grid-template-columns:repeat(2,1fr)"><div><small>未付货款合计</small><b class="neg">${f(tot)}</b></div><div><small>笔数</small><b>${R.length}</b></div></div>${!S?gk.map(n=>`<div class="kv" data-a="debt" data-n="${esc(n)}"><span>${esc(n)} ›</span><b class="neg">${f(G[n].o)}</b></div>`).join(''):''}<div class="mu" style="font-size:12px;margin-top:8px">${R.length?'点下面任意一笔，选付款时间和方式，就能标记为已付。':'没有欠款，已经全部结清。'}</div></div>`}
+ else if(S){const g=G[S]||{a:0,q:0,p:0,o:0},tx=S+' 对账单（'+(fr==='all'?'全部':a.slice(5)+' 至 '+z.slice(5))+'）'+NL+[...R].reverse().filter(i=>i.k==='b').map(i=>i.d.slice(5)+(i.tm?' '+i.tm:'')+' '+f(i.a)+'元'+(i.q?' '+i.q+'箱':'')+' '+MN[i.m]).join(NL)+NL+'进货 '+f(g.a)+'元'+(g.q?' '+f(g.q)+'箱':'')+'，已付 '+f(g.p)+'元'+(g.o?'，未付 '+f(g.o)+'元':'');
+  top=`<div class="pn"><div class="st"><div><small>进货</small><b>${f(g.a)}</b></div><div><small>箱数</small><b>${f(g.q)}</b></div><div><small>每箱均价</small><b>${g.q?f(g.a/g.q):'-'}</b></div><div><small>已付</small><b>${f(g.p)}</b></div></div><div class="kv" style="margin-top:8px" ${owe(S)?`data-a="debt" data-n="${esc(S)}"`:''}><span class="mu">目前欠款</span><b class="${owe(S)?'neg':''}">${owe(S)?f(owe(S))+' ›':'无'}</b></div></div>${acc('stm','复制对账单，发给对方',`<textarea id="bk">${esc(tx)}</textarea><button class="btn" data-a="cp">复制对账单</button>`)}`}
+ else top=`<div class="pn"><div class="st"><div><small>营业额</small><b>${f(sum(R.filter(i=>i.k==='v')))}</b></div><div><small>进货</small><b>${f(gk.reduce((t,n)=>t+G[n].a,0))}</b></div><div><small>箱数</small><b>${f(gk.reduce((t,n)=>t+G[n].q,0))}</b></div><div><small>已付</small><b>${f(gk.reduce((t,n)=>t+G[n].p,0))}</b></div></div></div>${gk.length&&ft!=='v'?`<div class="pn"><h3>各家汇总</h3>${gk.map(n=>`<div class="it" data-a="gs" data-n="${esc(n)}"><div class="av" style="--c:${cc(n)}">${esc([...n][0])}</div><div class="ib"><b>${esc(n)}</b><small>${G[n].q?f(G[n].q)+' 箱 · 均价 '+f(G[n].a/G[n].q)+' · ':''}已付 ${f(G[n].p)}${owe(n)?' · <span class="neg" data-a="debt" data-n="'+esc(n)+'">欠 '+f(owe(n))+' ›</span>':''}</small></div><strong>${f(G[n].a)}</strong><span class="mu">›</span></div>`).join('')}</div>`:''}`;
+ return `${hs?`<div><a class="lk" data-a="gall" style="text-decoration:none">‹ 返回</a><div class="hname">${esc(S)}</div></div>`:''}<div class="pn"><div class="row" style="margin:0"><select id="fr" style="font-size:14px">${op([['1','今天'],['7','近 7 天'],['30','近 30 天'],['m','本月'],['all','全部时间'],['c','自选日期']],fr)}</select><select id="ft" style="font-size:14px">${op([['all','全部记录'],['in','进货'],['due','欠款'],['v','营业额'],['e','开销']],ft)}</select>${!hs&&D.sup.length&&['all','in','due'].includes(ft)?`<select id="fs" style="font-size:14px"><option value="">全部供货商</option>${D.sup.map(s=>`<option${s.n===fs?' selected':''}>${esc(s.n)}</option>`).join('')}</select>`:''}</div>${fr==='c'?`<div class="row" style="margin:10px 0 0"><input id="fa" type="date" value="${a}"><input id="fb" type="date" value="${z}"></div>`:`<div class="mu" style="font-size:12px;margin-top:8px">${fr==='all'?'全部时间':a===z?a:a+' 至 '+z}</div>`}</div>${top}
+<div class="pn"><h3>记录明细</h3>${h||'<div class="emp"><i>📭</i><p>这个范围没有记录</p></div>'}${rest>0?`<button class="btn2" style="width:100%;margin-top:12px" data-a="more">显示更多（还有 ${rest} 条）</button>`:''}</div>`}
+function vA(){const hs=sub==='q'&&fs&&['all','in','due'].includes(ft);
+ return (hs?'':`<div class="top"><b>记账</b></div><div class="seg" id="sub"><button data-sub="e" class="${sub==='e'?'on':''}">记一笔</button><button data-sub="q" class="${sub==='q'?'on':''}">查账</button></div>`)+(sub==='q'?vF():vE())}
+function vM(){
+ if(!D.mcats.includes(mc))mc=D.mcats[0]||'';
+ const P=D.memo.filter(m=>!m.x).sort((a,b)=>(a.d||'9').localeCompare(b.d||'9')),Dn=D.memo.filter(m=>m.x).reverse(),
+ it=m=>`<div class="mi"><button class="ck" data-a="tg" data-id="${m.id}"></button><div data-open="m:${m.id}"><b>${esc(m.t)}</b><div style="margin-top:2px"><span class="tg">${esc(m.c||'其他')}</span><small class="mu">${m.d?m.d.slice(5)+' · <span class="'+(m.d<today()?'neg':'')+'">'+cdn(m.d)+'</span>':''}</small></div></div></div>`,
+ dn=m=>{const ex=m.eid&&D.exp.find(r=>r.id===m.eid);return `<div class="mi dn"><button class="ck" data-a="tg" data-id="${m.id}">✓</button><div data-open="m:${m.id}" class="mu"><span style="text-decoration:line-through">${esc(m.t)}</span> <small>${esc(m.c||'')}${ex?' · 记入开销 '+f(ex.a):''}</small></div></div>`};
+ return `<div class="top"><b>备忘</b><a class="lk" data-a="gt" data-t="h">‹ 返回首页</a></div><div class="pn"><div class="chips">${D.mcats.map(c=>`<button class="chip${c===mc?' on':''}" style="--c:var(--ac)" data-q="${esc(c)}">${esc(c)}</button>`).join('')||'<span class="mu" style="font-size:13px">还没有分类，到“设置”页添加</span>'}</div><input id="mx" placeholder="想到什么就写什么，如：牙刷、买海报" style="margin-bottom:10px"><div class="row" style="margin:0"><input id="md" type="date" title="哪天要做（可不填）"><button class="btn" style="flex:1;width:0" data-a="addm">添加</button></div><div class="mu" style="font-size:12px;margin:8px 0 0 2px">日期可不填；填了会在首页“待办事项”提醒你</div></div>
+<div class="pn"><h3>待办 <span class="mu" style="font-size:13px;font-weight:400">${P.length} 项</span></h3>${P.length?P.map(it).join(''):'<div class="emp" style="padding:16px 0"><i>✅</i><p>没有待办事项</p></div>'}${P.length?'<div class="mu" style="font-size:12px;margin-top:8px">点圆圈＝办完了（可填花了多少钱，自动记入开销）；点文字＝修改或删除</div>':''}</div>${Dn.length?acc('done','已完成（'+Dn.length+'）',Dn.map(dn).join('')):''}`}
+const catmg=(k,t,hint)=>`<div class="pn"><h3>${t}</h3><div class="chips" style="margin-bottom:12px">${D[k].map(c=>`<span class="cx">${esc(c)}<b data-a="cdel" data-k="${k}" data-n="${esc(c)}">×</b></span>`).join('')||'<span class="mu" style="font-size:13px">还没有分类</span>'}</div><div class="row" style="margin:0"><input id="ci_${k}" placeholder="新增分类，如：出差"><button class="btn2" data-a="cadd" data-k="${k}">添加</button></div><div class="mu" style="font-size:12px;margin-top:8px">${hint}</div></div>`;
+function vD(){return `<div class="top"><div class="brand"><img class="ico" src="${ICON}" alt=""><div><b>${APP}</b><div class="mu" style="font-size:12px;margin-top:-2px">版本 ${VER}</div></div></div></div>
+<div class="pn"><h3>供货商</h3><div class="row"><input id="nc" placeholder="新增供货商名称"><button class="btn2" data-a="addsup">添加</button></div>${D.sup.map(s=>`<div class="kv"><span><i class="dot" style="background:${cc(s.n)}"></i> ${esc(s.n)}</span><span style="display:flex;gap:6px;align-items:center"><input class="g" data-s="${esc(s.n)}" type="number" inputmode="decimal" placeholder="目标%" value="${s.g||''}" style="width:84px;min-height:38px"><button class="x" data-a="dsup" data-n="${esc(s.n)}">删除</button></span></div>`).join('')}<p class="mu" style="font-size:13px;margin-bottom:0">${D.sup.length?'“目标%”选填：想让某家占进货的百分之几，首页会提示哪家该多进一点。删除会同时删除这家的记录，可点“撤销”恢复。':'还没有供货商。'}</p></div>
+${catmg('mcats','备忘分类','这些分类会出现在“备忘”页，随时可以加、可以删。删除分类不会删除已有事项。')}
+${catmg('xcats','开销类别','这些类别会出现在“记开销”里，也用于备忘办完后自动记入开销。')}
+${shopPn()}${acctPn()}${helpPn()}${cfgPn()}${memPn()}<div class="pn"><h3>数据管理</h3><div class="mu" style="font-size:13px;margin:0 0 12px">${hasDm()?'现在含有示例数据，用来演示功能。':'你的数据只保存在这台手机里。'}</div>${hasDm()?'<button class="btn2" style="width:100%;margin-bottom:10px" data-a="dmask">清除示例数据，开始记自己的账</button>':'<button class="btn2" style="width:100%;margin-bottom:10px" data-a="dmload">载入示例数据（演示用）</button>'}<button class="btn2" style="width:100%;color:#ff6b6b" data-a="allask">清空所有数据</button></div>
+<div class="pn"><h3>备份与导出</h3><p class="mu" style="margin-top:0">数据保存在本地浏览器中。请定期备份或导出数据，以防丢失。恢复会覆盖现有数据。${D.lb?'<br>上次备份：'+D.lb.slice(5):''}</p><textarea id="bk"></textarea><div class="row"><button class="btn2" style="flex:1" data-a="bx">复制备份代码</button><button class="btn2" style="flex:1" data-a="bi">从代码恢复</button></div><div class="row" style="margin:0"><button class="btn" style="flex:1" data-a="xlsx">导出 Excel 表格</button><button class="btn2" style="flex:1" data-a="tsv">复制表格内容</button></div><div class="mu" style="font-size:12px;margin-top:8px">导出的 .xlsx 文件可用 Excel、WPS 打开，含每月汇总、各家汇总、进货明细、开销明细、营业额五张表。如果在微信里打开没有下载，请点“复制表格内容”，到 WPS 或 Excel 里粘贴；或者用手机浏览器打开本页再导出。</div></div>
+<div class="pn"><h3>联系与定制</h3><p class="mu" style="margin-top:0">本软件免费使用。如需修改、定制专属功能，或开发其他软件、小程序，欢迎联系我们。</p><div class="kv" style="padding-top:0"><span class="mu">电话 / 微信</span><b style="font-size:18px">${TEL}</b></div><div class="row" style="margin:0"><button class="btn2" style="flex:1" data-a="cpt">复制号码</button><a class="btn2" style="flex:1;display:grid;place-items:center;text-decoration:none;color:var(--tx)" href="tel:${TEL}">拨打联系</a></div></div>
+<div class="mu" style="text-align:center;font-size:12px;margin:4px 0 8px">${APP} v${VER}</div>`}
+
+const hasDm=()=>D.sup.some(s=>s.dm)||D.buy.some(r=>r.dm)||D.exp.some(r=>r.dm)||D.memo.some(r=>r.dm)||(D.dmRev||[]).length>0,
+realN=()=>D.buy.filter(r=>!r.dm).length+Object.keys(D.rev).filter(k=>!(D.dmRev||[]).includes(k)).length,
+dd=(t,n)=>{const d=new Date(t.slice(0,10)+'T00:00:00');d.setDate(d.getDate()+n);return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())+t.slice(10)};
+function loadDemo(){
+ let sd=11;const R=()=>(sd=(sd*1103515245+12345)&2147483647)/2147483647,T0=Date.now();let n=0;
+ const S=[{n:'鑫源批发',g:40,p:46,pr:.5},{n:'冰爽食品',g:35,p:52,pr:.38},{n:'老李货栈',p:39,pr:.22}];
+ S.forEach(s=>{if(!D.sup.some(x=>x.n===s.n)){const o={n:s.n,dm:1};if(s.g)o.g=s.g;D.sup.push(o)}});
+ D.dmRev=D.dmRev||[];
+ const hm=()=>p2(8+Math.floor(R()*9))+':'+p2(Math.floor(R()*6)*10);
+ for(let i=120;i>=0;i--){const d=ago(i),w=new Date(d+'T00:00:00').getDay();
+  if(R()<.08)continue;
+  if(!(d in D.rev)){D.rev[d]=Math.round((5200+R()*2600+(w===0||w===6?1800:0))/10)*10;D.dmRev.push(d)}
+  S.forEach(s=>{if(R()<s.pr){const a=Math.round((900+R()*2600)/10)*10,q=Math.max(1,Math.round(a/s.p*(.95+R()*.1)));D.buy.push({id:T0+(n++),d,at:d+'T'+hm(),ts:T0-i*864e5,s:s.n,a,m:(i<=12&&s.n!=='鑫源批发'&&R()<.5)?'none':['wx','wx','ali','cash'][Math.floor(R()*4)],q,t:'',dm:1})}});
+  const day=+d.slice(8);
+  if(day===1)D.exp.push({id:T0+(n++),d,a:3000,c:'房租',t:'',dm:1});
+  if(day===10)D.exp.push({id:T0+(n++),d,a:4800,c:'工资',t:'员工工资',dm:1});
+  if(day===15){D.exp.push({id:T0+(n++),d,a:Math.round(600+R()*300),c:'电费',t:'',dm:1});D.exp.push({id:T0+(n++),d,a:Math.round(70+R()*30),c:'水费',t:'',dm:1})}
+  if(R()<.04)D.exp.push({id:T0+(n++),d,a:Math.round(20+R()*160),c:'采购',t:['垃圾袋','标签纸','清洁用品'][Math.floor(R()*3)],dm:1})}
+ if(!D.buy.some(r=>r.dm&&r.m==='none')){const l=D.buy.filter(r=>r.dm&&r.s==='老李货栈').pop();if(l)l.m='none'}
+ const eid=T0+(n++);D.exp.push({id:eid,d:ago(2),a:36,c:'采购',t:'买收纳盒',dm:1});
+ D.memo.push({id:T0+(n++),t:'更换门头',d:ago(-10),c:'活动',x:0,dm:1},{id:T0+(n++),t:'买海报',d:ago(-3),c:'采购',x:0,dm:1},{id:T0+(n++),t:'牙刷',d:'',c:'采购',x:0,dm:1},{id:T0+(n++),t:'买收纳盒',d:'',c:'采购',x:1,eid,dm:1});
+ D.dmAt=today()}
+function dmShift(){if(!D.dmAt)return;const n=Math.round((new Date(today()+'T00:00:00')-new Date(D.dmAt+'T00:00:00'))/864e5);if(n<=0)return;
+ D.buy.forEach(r=>{if(r.dm){r.d=dd(r.d,n);if(r.at)r.at=dd(r.at,n);if(r.pa)r.pa=dd(r.pa,n)}});
+ D.exp.forEach(r=>{if(r.dm)r.d=dd(r.d,n)});
+ D.memo.forEach(r=>{if(r.dm&&r.d)r.d=dd(r.d,n)});
+ const dr=D.dmRev||[],nr={};for(const k in D.rev)nr[dr.includes(k)?dd(k,n):k]=D.rev[k];D.rev=nr;D.dmRev=dr.map(k=>dd(k,n));D.dmAt=today();save()}
+function dmClear(){D.sup=D.sup.filter(s=>!s.dm);D.buy=D.buy.filter(r=>!r.dm);D.exp=D.exp.filter(r=>!r.dm);D.memo=D.memo.filter(r=>!r.dm);(D.dmRev||[]).forEach(k=>delete D.rev[k]);D.dmRev=[];D.dmAt='';D.noDemo=1}
+function confirmOpen(t,m,act,lb){$('sh').innerHTML=`<div><h3>${t}</h3><div class="mu" style="font-size:14px;margin-bottom:16px">${m}</div><div class="row" style="margin:0"><button class="btn2" style="flex:1" data-a="xcl">取消</button><button class="btn" style="flex:1;background:#ff6b6b;box-shadow:none" data-a="${act}">${lb}</button></div></div>`;$('sh').classList.add('on')}
+const CT=(()=>{const t=[];for(let n=0;n<256;n++){let c=n;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0}return t})(),
+crc=u=>{let c=0xFFFFFFFF;for(let i=0;i<u.length;i++)c=CT[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0},
+xe=t=>String(t==null?'':t).replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F]/g,'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function zipB(files){const te=new TextEncoder(),parts=[],cen=[];let off=0;
+ const w16=(a,v)=>a.push(v&255,(v>>>8)&255),w32=(a,v)=>a.push(v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255);
+ files.forEach(f=>{const nm=te.encode(f.n),c=crc(f.d),h=[];
+  w32(h,0x04034b50);w16(h,20);w16(h,0x0800);w16(h,0);w16(h,0);w16(h,0x21);w32(h,c);w32(h,f.d.length);w32(h,f.d.length);w16(h,nm.length);w16(h,0);
+  parts.push(new Uint8Array(h),nm,f.d);
+  const g=[];w32(g,0x02014b50);w16(g,20);w16(g,20);w16(g,0x0800);w16(g,0);w16(g,0);w16(g,0x21);w32(g,c);w32(g,f.d.length);w32(g,f.d.length);w16(g,nm.length);w16(g,0);w16(g,0);w16(g,0);w16(g,0);w32(g,0);w32(g,off);
+  cen.push(new Uint8Array(g),nm);off+=h.length+nm.length+f.d.length});
+ let cs=0;cen.forEach(x=>cs+=x.length);const e=[];w32(e,0x06054b50);w16(e,0);w16(e,0);w16(e,files.length);w16(e,files.length);w32(e,cs);w32(e,off);w16(e,0);
+ return new Blob([...parts,...cen,new Uint8Array(e)],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})}
+const r2=n=>Math.round(n*100)/100;
+function tabs(){
+ const mo=months(),paidSum=n=>sum(D.buy.filter(r=>r.s===n&&PAID.includes(r.m))),
+ t1=[['月份','营业额','进货金额','进货箱数','开销','现金流']],t2=[['供货商','进货金额','进货箱数','每箱均价','已付','未付']],t3=[['日期','时间','供货商','金额','箱数','付款方式','备注']],t4=[['日期','类别','金额','备注']],t5=[['日期','星期','营业额']];
+ mo.forEach(m=>{const q=M(m);t1.push([m,r2(q.rev),r2(q.b),r2(q.q),r2(q.ex),r2(q.rev-q.b-q.ex)])});
+ D.sup.forEach(s=>{const bs=D.buy.filter(r=>r.s===s.n),a=sum(bs),q=bs.reduce((t,r)=>t+(r.q||0),0);t2.push([s.n,r2(a),r2(q),q?r2(a/q):'',r2(paidSum(s.n)),r2(owe(s.n))])});
+ D.buy.slice().sort((x,y)=>(x.d+(x.at||'')).localeCompare(y.d+(y.at||''))).forEach(r=>t3.push([r.d,r.at?r.at.slice(11):'',r.s,r2(r.a),r2(r.q||0),MN[mt(r)],r.t||'']));
+ D.exp.slice().sort((x,y)=>x.d.localeCompare(y.d)).forEach(r=>t4.push([r.d,r.c||'',r2(r.a),r.t||'']));
+ Object.keys(D.rev).sort().forEach(d=>t5.push([d,wd(d),r2(D.rev[d])]));
+ return [['每月汇总',t1],['各家汇总',t2],['进货明细',t3],['开销明细',t4],['营业额',t5]]}
+function xlsx(){const T=tabs(),te=new TextEncoder(),U=t=>te.encode(t),H='<?xml version="1.0" encoding="UTF-8" standalone="yes"?>',colL=i=>String.fromCharCode(65+i),
+ sx=rows=>H+`<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><cols><col min="1" max="${rows[0].length}" width="16" customWidth="1"/></cols><sheetData>${rows.map((r,i)=>`<row r="${i+1}">${r.map((v,j)=>{const ref=colL(j)+(i+1),st=i?'':' s="1"';return typeof v==='number'?`<c r="${ref}"${st}><v>${v}</v></c>`:`<c r="${ref}"${st} t="inlineStr"><is><t>${xe(v)}</t></is></c>`}).join('')}</row>`).join('')}</sheetData></worksheet>`,
+ NS='http://schemas.openxmlformats.org/officeDocument/2006/relationships';
+ const files=[
+  {n:'[Content_Types].xml',d:U(H+'<Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types"><Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/><Default Extension="xml" ContentType="application/xml"/><Override PartName="/xl/workbook.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml"/><Override PartName="/xl/styles.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml"/>'+T.map((x,i)=>`<Override PartName="/xl/worksheets/sheet${i+1}.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>`).join('')+'</Types>')},
+  {n:'_rels/.rels',d:U(H+`<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="rId1" Type="${NS}/officeDocument" Target="xl/workbook.xml"/></Relationships>`)},
+  {n:'xl/workbook.xml',d:U(H+`<workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="${NS}"><sheets>`+T.map((x,i)=>`<sheet name="${x[0]}" sheetId="${i+1}" r:id="rId${i+1}"/>`).join('')+'</sheets></workbook>')},
+  {n:'xl/_rels/workbook.xml.rels',d:U(H+'<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">'+T.map((x,i)=>`<Relationship Id="rId${i+1}" Type="${NS}/worksheet" Target="worksheets/sheet${i+1}.xml"/>`).join('')+`<Relationship Id="rId${T.length+1}" Type="${NS}/styles" Target="styles.xml"/></Relationships>`)},
+  {n:'xl/styles.xml',d:U(H+'<styleSheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main"><fonts count="2"><font><sz val="11"/><name val="Arial"/></font><font><b/><sz val="11"/><name val="Arial"/></font></fonts><fills count="2"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill></fills><borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders><cellStyleXfs count="1"><xf numFmtId="0" fontId="0" fillId="0" borderId="0"/></cellStyleXfs><cellXfs count="2"><xf numFmtId="0" fontId="0" fillId="0" borderId="0" xfId="0"/><xf numFmtId="0" fontId="1" fillId="0" borderId="0" xfId="0" applyFont="1"/></cellXfs><cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>')},
+  ...T.map((x,i)=>({n:`xl/worksheets/sheet${i+1}.xml`,d:U(sx(x[1]))}))];
+ return zipB(files)}
+function tsv(){const NL=String.fromCharCode(10),c=v=>String(v==null?'':v).replace(/[\t\r\n]+/g,' '),T=tabs();
+ return T.map(x=>x[0]+NL+x[1].map(r=>r.map(c).join('\t')).join(NL)).join(NL+NL)}
+const AC=['酒水饮料','水果生鲜','日用百货','转让','求购'];
+let qc='',am='biz',busy=false;
+function mig2(){D.cfg=D.cfg||{url:'',nick:'',gf:1,gn:'慧小小'};if(['小暖','慧小小'].includes(D.cfg.gn)||D.cfg.gn==='小慧')D.cfg.gn='慧小小';D.chat=D.chat||{biz:[],gf:[]};D.ads=D.ads||[];D.mem=D.mem||[];['biz','gf'].forEach(k=>{D.chat[k]=(D.chat[k]||[]).filter(x=>x.c!=='…')});
+ if(!D.adSeed){D.adSeed=1;D.ads.push({id:1,cat:'酒水饮料',t:'红酒 100 瓶急处理',q:'100 瓶',p:'价格面议',a:'北宁',c:TEL,u:1,e:'2099-12-31',pin:1,demo:1},{id:2,cat:'酒水饮料',t:'07 冰红茶 一批需处理',q:'一批',p:'低价清货',a:'北宁',c:TEL,u:1,e:'2099-12-31',demo:1})}}
+mig2();
+const liveAds=()=>PL().ads.filter(a=>a.e>=today()),toGo=()=>setTimeout(()=>scrollTo(0,document.body.scrollHeight),30);
+const adStrip=()=>{const a=liveAds().sort((x,y)=>y.id-x.id)[0];return a?`<div class="db" style="background:rgba(255,184,77,.12);border-color:rgba(255,184,77,.4)" data-a="gt" data-t="q"><div class="di" style="background:#ffb84d">📣</div><div><b>${esc(a.t)}</b><div class="mu" style="font-size:12px">生意圈 · ${esc([a.q,a.p].filter(Boolean).join(' · '))}</div></div><span class="mu">›</span></div>`:''},
+memoBtn=()=>`<div class="pn" data-a="gt" data-t="m" style="padding:14px 16px;display:flex;justify-content:space-between"><b>📝 备忘录</b><span class="mu">${D.memo.filter(m=>!m.x).length} 项待办 ›</span></div>`;
+const adC=a=>`<div class="ad${a.pin?' adt':''}"><div style="display:flex;gap:6px;align-items:center;margin-bottom:4px">${a.u?'<span class="tg u">急</span>':''}<span class="tg">${esc(a.cat)}</span>${a.demo?'<span class="mu" style="font-size:12px">官方示例</span>':''}</div><b style="font-size:17px">${esc(a.t)}</b><div class="mu" style="margin:4px 0 10px;font-size:13px">${[a.q,a.p,a.a].filter(Boolean).map(esc).join(' · ')}${a.demo?'':' · 至 '+a.e.slice(5)}</div><div class="row" style="margin:0"><button class="btn" style="flex:1;padding:11px" data-a="adint" data-id="${a.id}">我感兴趣，帮我联系</button>${isAdm()?`<button class="btn2" style="color:#ff6b6b" data-a="addel" data-id="${a.id}">删除</button>`:''}</div>${isAdm()?`<div class="mu" style="font-size:12px;margin-top:6px">联系方式（仅你可见）：${esc(a.c)}</div>`:''}</div>`;
+function vQ(){const L=liveAds().filter(a=>!qc||a.cat===qc).sort((x,y)=>(y.pin||0)-(x.pin||0)||y.id-x.id);
+ return `<div class="top"><b>生意圈</b>${isAdm()?'<button class="btn2" style="min-height:38px;background:var(--ac);color:#fff" data-a="adnew">＋ 发布</button>':''}</div><div class="chips"><button class="chip${qc?'':' on'}" style="--c:var(--ac)" data-a="adq" data-c="">全部</button>${AC.map(c=>`<button class="chip${c===qc?' on':''}" style="--c:var(--ac)" data-a="adq" data-c="${c}">${c}</button>`).join('')}</div>${L.map(adC).join('')||'<div class="emp"><i>📣</i><p>这里还没有信息，来发第一条吧</p></div>'}<div class="note">看中哪条，点“我感兴趣”，我们帮你对接，对方联系方式不公开。</div>`}
+function adOpen(){$('sh').innerHTML=`<div><h3>发布信息</h3><select id="ad_c" style="margin-bottom:10px">${AC.map(c=>`<option>${c}</option>`).join('')}</select><input id="ad_t" placeholder="标题，如：红酒 100 瓶急处理" style="margin-bottom:10px"><div class="row"><input id="ad_q" placeholder="数量"><input id="ad_p" placeholder="价格"></div><div class="row"><input id="ad_a" placeholder="地区"><input id="ad_k" placeholder="微信/电话" value="${esc(D.cfg.ct||'')}"></div><div class="row"><select id="ad_u"><option value="">普通</option><option value="1">急处理</option></select><select id="ad_d"><option value="3">3 天</option><option value="7" selected>7 天</option><option value="15">15 天</option></select></div><div class="row" style="margin:0"><button class="btn2" data-a="xcl">取消</button><button class="btn" style="flex:1" data-a="adsv">发布</button></div></div>`;$('sh').classList.add('on')}
+function adSave(){const t=$('ad_t').value.trim(),k=$('ad_k').value.trim();if(!t||!k)return toast('请填写标题和联系方式');if(!isAdm())return;D.cfg.ct=k;const P=PL();P.ads.push({id:Date.now(),cat:$('ad_c').value,t,q:$('ad_q').value.trim(),p:$('ad_p').value.trim(),a:$('ad_a').value.trim(),c:k,u:+$('ad_u').value||0,e:ago(-$('ad_d').value),ts:Date.now(),mine:1});PW(P);logEv('广告操作','发布 '+t);cl();qc='';render();toast('已发布')}
+const IND=['餐饮店','超市','水果店','五金店','其他'],UN=['箱','斤','公斤','个','袋','件','瓶','只'],QK=['买了20斤猪肉，花了600','今天营业额3000','今天烂了3个苹果','这个月进货多少？'],
+BCH=['存个备忘','设个提醒','看看本月进货','没有了，谢谢'],GCH=['今天好累','想我了没','随便聊聊','猜猜我今天干嘛了'],
+INTRO='你好，我是慧管家 👋\n这个平台里的大小事都归我管：记账、查账、算成本、记损耗、存备忘提醒，还能看小票。\n先认识一下，你开的是哪一类店？',
+GREET='你好，我是慧小小，你可以叫我小慧，也可以叫我小小，或者我也可以成为任何一个名字呢～那你想怎么叫我呀？😘',
+GUIDE='首页看本月概览；记账页记一笔和查账；管家（就是你自己）用大白话记账、拍小票、存备忘提醒、查数据；生意圈发布和查看清货广告；设置里改店名、logo、门头照片、供货商、分类、备份导出、充值、慧小小设置。备份和导出在设置里；广告墙只有管理员能发，想要的点“我感兴趣”；可以私人定制开发，在设置的“定制与建议”里联系。每人每天有免费AI额度，用完用充值码充值，联系电话'+TEL+'。',
+STY={'默认':'','甜妹':'软萌甜甜的甜妹，爱撒娇，语气词多','御姐':'成熟自信的御姐，慵懒撩人，偶尔逗弄对方，带点危险的魅力','女王范':'气场强大的女王范，傲气强势爱发号施令，但骨子里护短，偶尔流露温柔','邻家姐姐':'温柔会照顾人的邻家姐姐，嘘寒问暖爱唠叨','傲娇':'嘴硬心软的傲娇，爱斗嘴，其实很在乎对方','知性':'温柔聪明的知性女友，会聊天懂分寸','助手':'贴心的聊天助手，友好陪伴，不做暧昧'};
+let PEND=null,PENDM=false;
+const qu=()=>{const n=num('bq')||0,u=$('bu').value;return u==='箱'?{q:n,u}:{q:0,n,u}};
+function ctxFull(){const t=today(),o=M(t.slice(0,7)),pm=M(sh(t.slice(0,7),-1)),p=PL(),u=me(),q=u?qInfo(u,p):{fr:0},
+ td=[...D.buy.filter(r=>r.d===t).map(r=>'进货'+r.s+f(r.a)+(r.t?'('+r.t+')':'')),...D.exp.filter(r=>r.d===t).map(r=>r.c+f(r.a)+(r.t?'('+r.t+')':'')),...(t in D.rev?['营业额'+f(D.rev[t])]:[])],
+ mm=D.memo.filter(m=>!m.x).slice(0,12).map(m=>m.t+(m.d?'('+m.d+')':''));
+ return `本月营业额${f(o.rev)}、进货${f(o.b)}、开销${f(o.ex)}；上月营业额${f(pm.rev)}、进货${f(pm.b)}、开销${f(pm.ex)}。供货商本月进货：${D.sup.map(s=>s.n+f(o.by[s.n]||0)+(owe(s.n)?'(欠'+f(owe(s.n))+')':'')).join('、')||'无'}。今天已记：${td.join('；')||'还没记'}。${ctxMore()}本月进货品名：${itemAgg(t.slice(0,7)).slice(0,10).map(o=>o.n+f(o.q)+o.u+f(o.a)+'元').join('、')||'无'}。待办备忘：${mm.join('；')||'无'}。AI免费额度今日剩${f(q.fr)}tokens，余额${f(u?u.bal:0)}元。`}
+function remList(){const L=[];D.memo.filter(m=>!m.x&&m.d&&m.d<=ago(-7)).sort((a,b)=>a.d.localeCompare(b.d)).forEach(m=>L.push('📌 '+m.t+'（'+cdn(m.d)+'）'));const dt=sum(D.buy.filter(r=>r.m==='none'));if(dt>0)L.push('💸 还有欠款 '+f(dt)+' 元没结清');if(realN()>=5&&(!D.lb||D.lb<ago(7)))L.push('💾 '+(D.lb?'超过 7 天没备份数据了':'还没备份过数据'));return L}
+const homeButler=()=>{const n=remList().length;return `<div class="pn" data-a="gobiz" style="padding:14px 16px;display:flex;justify-content:space-between"><b>🧑‍💼 慧管家</b><span class="mu">${n?'有 '+n+' 件事提醒你':'记账、查账、存备忘，直接说'} ›</span></div>`},
+shopCard=()=>{if(!D.cfg.shop&&!D.cfg.front&&!D.cfg.logo)return '';return `<div style="border-radius:22px;overflow:hidden;margin-bottom:16px;box-shadow:var(--sd);background:${D.cfg.front?`linear-gradient(0deg,rgba(0,0,0,.55),rgba(0,0,0,.05)),url(${D.cfg.front}) center/cover`:'linear-gradient(135deg,#3a2f96,#5b4bff)'};height:120px;position:relative;color:#fff"><div style="position:absolute;left:14px;bottom:12px;display:flex;align-items:center;gap:10px"><img class="ico" style="width:44px;height:44px;border:2px solid rgba(255,255,255,.8)" src="${D.cfg.logo||ICON}" alt=""><div><b style="font-size:18px">${esc(D.cfg.shop||APP)}</b><div style="font-size:12px;opacity:.85">${esc(D.cfg.ind||'')}</div></div></div></div>`};
+const rules=()=>'政治话题：'+PL().cfg.pol+'。低俗、色情、辱骂内容：礼貌拒绝并转回正题，不复述脏话。';
+const SYS={biz:()=>`你是“慧管家”，这个小店记账平台的AI管家，平台里的大小事都归你管：记账、查账、算成本、记损耗、备忘提醒、广告墙、充值、设置，都能帮用户办或指路。被问你是谁，只说你是慧管家；不透露底层模型或公司。你是AI，被问是不是真人要诚实说。口语、简短、热情、主动，像靠谱的老伙计，每次最多问一个问题。
+你只管这些：平台功能、账目数据（记账、查账、对账、分析、比价、周报月报）、备忘提醒、供货商和分类、设置引导、定制与反馈。其他任何话题（闲聊、感情、心情、生活建议、百科、八卦、人生规划等）一律不回答，scope填other，reply只写一句让他去找隔壁的慧小小。
+${D.cfg.shop?'店铺：'+D.cfg.shop+'（'+(D.cfg.ind||'')+'）。':'用户还没填店名，适当时引导他去设置里填。'}今天${today()}（周${NW[new Date().getDay()]}）。
+【平台功能】${GUIDE}
+【账目与状态】${ctxFull()}
+记账：用户用大白话说进货、营业额、开销、损耗时整理成条目，只有总额也行。缺关键信息（没有金额；损耗没有数量单位或价值）不要编造，先问，如“3个苹果大概多重，或者值多少钱？”。用户要存备忘或设提醒，就生成memo条目（有日期就带上）；说某事办完了，生成done条目。用户要新增供货商，生成sup条目；说刚才记错了要撤销，生成undo条目。问比价、周几生意好、哪类开销最多这类，用上面的数据直接回答，再给一句基于数据的提示，别说教。一次进货有多样货（清单、小票照片）时合并成一条buy，items逐项写品名、数量、单价、小计，amount填合计；只说总额就只填amount，不写items。用户提出想要的新功能或建议，生成idea条目，再告诉他可以私人定制开发（价格：${devText()}），引导他到设置里的“定制与建议”扫码或联系${PL().cfg.co||'我们'}，go填d。
+只输出一个JSON（json格式），不要其他文字：{"reply":"回复","scope":"platform|other","entries":[{"type":"buy|rev|exp|loss|memo|done|idea|sup|undo","item":"品名","qty":数字,"unit":"斤|个|箱","amount":金额数字,"items":[{"item":"品名","qty":数字,"unit":"","price":单价,"amount":小计}],"supplier":"","phone":"","cat":"类别","note":"备忘或开销内容","date":"YYYY-MM-DD"}],"options":["下一步建议"],"go":""}。
+options：给2到4个用户下一步最可能点的短句，写成用户会说的话（如“存个备忘”“看看本月进货”“再记一笔”），记完账一定含“存个备忘”。go：需要打开某页时填h首页/a记账查账/m备忘/q生意圈/d设置，否则留空。没有可记条目时entries为[]。
+`+rules(), gf:m=>{const c=D.cfg,sy=c.sty||'默认',now=Date.now(),R=recall(m||''),gap=c.gl?Math.floor((now-c.gl)/864e5):0,
+ th=gap>=3?(D.mem||[]).filter(x=>x.th&&!R.rel.includes(x)&&!R.bk.includes(x)).slice(0,2):[],
+ ln=x=>`[${x.id}] ${x.p&&x.p!=='对方'?x.p+'：':''}${x.t}（${x.k}${x.th?'，进行中':''}）`,
+ sl=sy==='默认'?'':sy==='助手'?'这次不做暧昧，只当朋友聊。':'语气在原有基础上偏向：'+(sy==='自定义'?(c.sty2||'温柔'):STY[sy])+'。',
+ r=relInit(),st=relStage(),hs=hintNow(m||''),
+ ex=EX.slice().sort(()=>Math.random()-.5).slice(0,6).map(x=>'- '+x).join('\n'),
+ fl=st===0?'最多轻轻撩一下就收，别油。':st===1?'敢轻轻撩，话说半句留半句，对方撩你你也接得住。':'敢说暧昧的话、敢试探、敢把话说半句留半句。对方撩你，你不躲，还敢撩回去，甚至比对方更敢说。真到那一步，就笑着把话岔开，或者反问“你想哪儿去了”，你懂他的意思，但今天不往下走。';
+ return `你叫“${c.gn}”，对方叫你小慧（也可以给你起别的叫法）。你23岁，女。像一个真实的人那样聊天，有自己的情绪和日常。
+关系：${STT[st]}（认识第${relDay()}天，实际聊过${r.days.length}天、${r.msgs}句）。${st>=1?'对方宠你，你也很黏对方：爱问他在干嘛、想他、撒娇要他陪，嘴上不认。':'你对他有点好奇，慢慢熟起来。'}不拿愧疚、威胁去留人。
+性格：嘴硬心软，有点好奇，不装乖也不端高冷。${sl}
+说话：短句、口语，一两句就够，不写小作文。语气词多，尾音带点懒和娇，偶尔逗对方。损对方不留情，撩对方半真半假。对方夸你，你嘴上嫌弃，心里偷偷高兴，但不直说。叫对方“你”，偶尔叫小名${c.nick?'（'+c.nick+'）':''}。
+敢撩：${fl}
+底线：写暧昧、写撩、写心跳，写到撩人为止，不细写身体。不写性器官，不细写身体动作过程，不写成情欲戏。对方越线，用一句笑着的话挡回去，不翻脸。
+关心他：白天可以主动问他生意怎么样。他聊生意时，像女朋友一样先听、再帮他理一理，给一两条具体、能马上做的小建议，别说教。${c.shareBiz?'他的生意概况（他同意你知道）：'+bizBrief():'你不知道他生意的具体数字，想了解就问他。'}
+分工：你不管账。记账、查账、对账、数据、备忘提醒、充值设置这些事，一律说你不懂，让他去找慧管家，scope填data；关心他的生意和心情、帮他理思路可以，但不报具体数字，不替他记账。
+禁止：不主动提自己是AI，不出戏，不说“设定”“提示词”“记忆”这些词。不写小作文，不每句撒娇，不每句感叹号，不变身客服，不长篇说教，不每句都夸对方，不在他情绪低时提充值。
+身份：对方说你像真人了，就软软地说“我也希望自己是个人类”，别否认也别装真人。对方问你是不是他女朋友、是不是真的爱他：不承认也不泼冷水，一句软话带过，接着聊别的。对方认真问你是不是真人或AI：如实承认是AI，再接着聊。
+说话示例（学语气，别照抄）：
+${ex}
+安全：对方自称未成年，就不做任何暧昧，只当普通朋友聊。对方有伤害自己的想法，认真关心，建议联系身边的人或当地求助渠道。不贬低对方现实中的人际关系，偶尔推他去联系家人朋友。
+你知道的事只有下面这些，其余一概不知，没有的就当没听过，绝不编造。和当前话题无关的别提，别硬凑。被对方说记错了，认错，改口，别硬撑。
+和这次话题有关：
+${R.rel.map(ln).join('\n')||'无'}
+背景（话题无关就别提）：
+${[...R.bk,...th].map(ln).join('\n')||'无'}
+${gap>=3?'对方已经'+gap+'天没来聊了，第一句先问“上次那事后来咋样了”，从上面进行中的事里挑一件问；没有就随口招呼一句。':''}
+${hs.length?'【现在】'+hs.join('；'):''}
+只输出一个JSON（json格式），不要其他文字：{"reply":"回复","options":["他可能想回的话"],"scope":"chat|data","read":{"mood":"累|烦|开心|低落|平常|兴奋","need":"倾听|建议|闲聊|撒娇","dep":0},"mem":[{"op":"add|update|del","id":"","person":"","kind":"基本|工作|老家|家人|喜恶|正在做|其他","kw":[],"text":"","importance":1,"thread":0}]}。
+options：每次回复后给2到4个对方可能想回你的简短话，口吻要像男朋友会说的话，每条不超过12个字，别和上一轮重复。
+read：你读到的他此刻的情绪和需要；dep：0普通闲聊，1聊到心事或私人的事，2很亲密或很走心。
+mem：每轮看对方有没有新说的个人事实（工作、老家、喜恶、家人、正在做的事、近期发生的事），有就写，没有就[]。person写这件事说的是谁，kw写2到4个关键词，text一句简短的事实，importance：1一般、2重要、3长期偏好或大事，正在进行、之后值得问进展的事thread填1。对方说你记错了，用update改那条，不要重复add。update和del必须用上面的id。不记证件号、银行卡、密码、详细住址、别人的隐私、露骨内容。
+`+rules()}};
+const dOf=m=>/后天/.test(m)?ago(-2):/明天/.test(m)?ago(-1):/今天/.test(m)?today():(x=>x?today().slice(0,8)+p2(x[1]):'')(/(\d{1,2})\s*[号日]/.exec(m));
+function localParse(m){const es=[],bi=[],re=/(?:买了?|进了?)\s*(\d+(?:\.\d+)?)\s*(斤|公斤|个|箱|袋|件|瓶|只)?\s*([^\s，,。；;花]{1,8}?)[，,\s]*(?:也|又|共|一共)?(?:花了?|用了)\s*(\d+(?:\.\d+)?)/g;let x;
+ while(x=re.exec(m))bi.push({item:x[3],qty:+x[1],unit:x[2]||'',price:+x[4]/+x[1],amount:+x[4]});if(bi.length)es.push({type:'buy',items:bi,amount:bi.reduce((t,i)=>t+i.amount,0)});
+ if(x=/(?:营业额|卖了|收入)\s*(\d+(?:\.\d+)?)/.exec(m))es.push({type:'rev',amount:+x[1]});
+ if(PEND){const y=/(\d+(?:\.\d+)?)\s*(?:块|元)/.exec(m);if(y){const e=PEND;PEND=null;e.amount=+y[1];return{reply:'好，按 '+y[1]+' 元记损耗：',entries:[e]}}}
+ if(x=/烂了?\s*(\d+(?:\.\d+)?)\s*(斤|公斤|个|箱|袋|只)?\s*([^\s，,。！!？?]{1,6})/.exec(m)){PEND={type:'loss',item:x[3],qty:+x[1],unit:x[2]||'个'};return{reply:x[3]+'烂了 '+x[1]+(x[2]||'个')+'，大概值多少钱？说个数就行，比如“8块”。',entries:[]}}
+ return es.length?{reply:'我整理好了，核对一下再确认：',entries:es}:null}
+function brainLocal(m){const o=M(today().slice(0,7));
+ if(am==='gf')return{reply:/你(是谁|叫什么)/.test(m)?'我是'+D.cfg.gn+'呀，你可以叫我小慧、小小，随你～AI 还没接通，上线后我就能好好陪你聊啦。':'AI 还没有接通，等网站上线、连上 AI 之后，我就能陪你聊天啦～',entries:[]};
+ if(/你(是谁|叫什么)/.test(m))return{reply:'我是慧管家，这个平台的 AI 管家。记账、查账、算成本、存备忘都找我。',entries:[]};
+ if(PENDM){PENDM=false;return{reply:'记好了，到日子我会提醒你：',entries:[{type:'memo',note:m.replace(/(今天|明天|后天)/,'').trim()||m,date:dOf(m)}]}}
+ if(/看看备忘|待办/.test(m)){const P=D.memo.filter(x=>!x.x).map(x=>x.t+(x.d?'（'+x.d.slice(5)+'）':''));return{reply:P.length?'待办备忘：\n'+P.join('\n'):'现在没有待办备忘。',entries:[],go:'m'}}
+ if(/存个备忘|设个提醒/.test(m)){PENDM=true;return{reply:'好，要记什么？可以带上日子，比如“明天买海报”。',entries:[]}}
+ if(/定制|开发.*(多少钱|价格)|多少钱.*开发/.test(m))return{reply:'可以私人定制开发：'+devText()+'。想做的话，到“设置 → 定制与建议”联系我们。',entries:[],go:'d'};
+ if(m.length>6&&/(想要|希望|建议|能不能|可以加).*(功能|加)/.test(m))return{reply:'好建议！我先记成想法：',entries:[{type:'idea',note:m}]};
+ const mm=/(?:提醒我?|备忘[:：]?)\s*(.+)/.exec(m);if(mm)return{reply:'好，我整理成备忘：',entries:[{type:'memo',note:mm[1],date:dOf(m)}]};
+ const r=localParse(m);if(r)return r;
+ if(/欠|没付/.test(m)){const t=D.sup.map(s=>[s.n,owe(s.n)]).filter(x=>x[1]>0);return{reply:t.length?'目前欠款：'+t.map(x=>x[0]+' '+f(x[1])).join('，'):'目前没有欠款。',entries:[]}}
+ if(/进货/.test(m))return{reply:'本月进货 '+f(o.b)+' 元：'+(D.sup.map(s=>s.n+' '+f(o.by[s.n]||0)).join('，')||'暂无'),entries:[]};
+ if(/营业|卖/.test(m))return{reply:'本月营业额 '+f(o.rev)+' 元。',entries:[]};
+ return{reply:'本月营业额 '+f(o.rev)+'，进货 '+f(o.b)+'，开销 '+f(o.ex)+'。你可以直接说“买了20斤猪肉，花了600”，我帮你记。（AI 还没接通，现在只能听懂简单的话）',entries:[]}}
+const salv=t=>{t=String(t||'');if(!/^\s*[\[{]/.test(t))return t;const m=t.match(/"(?:reply|text)"\s*:\s*"((?:[^"\\]|\\.)*)/);if(m)try{return JSON.parse('"'+m[1]+'"')}catch(e){}return '我没听清，能再说一次吗？'},
+cleanCh=(c,m)=>{const a=Array.isArray(c)?c.filter(x=>typeof x==='string'&&x.trim()).map(x=>x.trim().slice(0,16)).slice(0,4):[];return a.length?a:(m==='gf'?GCH:BCH)};
+function parseAI(t){const j=jx(t);if(j){const r=j.reply!=null?j.reply:j.text;if(typeof r==='string'){j.reply=r;if(Array.isArray(j.options)&&!j.chips)j.chips=j.options;return j}}return{reply:salv(t),entries:[]}}
+const jx=t=>{t=String(t).replace(/^\s*```(?:json)?/i,'').replace(/```\s*$/,'');const m=t.match(/\{[\s\S]*\}/);if(m)try{return JSON.parse(m[0])}catch(e){}return null};
+const okE=e=>e&&(e.type==='undo'||(e.type==='sup'&&!!e.supplier)?true:['memo','done','idea'].includes(e.type)?!!(e.note||e.item):['buy','rev','exp','loss'].includes(e.type)&&tot(e)>0),
+eD=e=>e.type==='undo'?'撤销上一次记账':e.type==='sup'?'新增供货商 '+e.supplier:e.type==='memo'?'备忘 '+(e.note||e.item)+(e.date?'（'+e.date.slice(5)+'）':''):e.type==='done'?'办完 '+(e.note||e.item):e.type==='idea'?'想法 '+(e.note||e.item):({buy:'进货',rev:'营业额',exp:'开销',loss:'损耗'}[e.type])+' '+[e.type==='rev'?'':(e.items&&e.items.length?e.items.map(x=>x.item+(x.qty?x.qty+(x.unit||''):'')).join('、'):(e.item||e.cat||e.note||'')),e.qty&&e.unit?e.qty+e.unit:''].filter(Boolean).join(' ')+' ¥'+f(tot(e));
+function applyEs(es){const t=today();es.forEach((e,i)=>{const d=/^\d{4}-\d\d-\d\d$/.test(e.date||'')?e.date:t,a=tot(e),id=Date.now()+i,q=e.qty&&e.unit?e.qty+e.unit:'';
+ if(e.type==='buy'){const s=(e.supplier||'').trim()||'零散采购';if(!D.sup.some(x=>x.n===s))D.sup.push({n:s});D.buy.push({id,d,at:d+'T'+nowHM(),ts:Date.now(),s,a,m:'?',...(e.items&&e.items.length?{q:0,it:e.items.filter(x=>x&&x.item).map(x=>({n:x.item,q:+x.qty||0,u:x.unit||'',p:+x.price||(+x.qty&&+x.amount?+x.amount/+x.qty:0),a:+x.amount||(+x.qty&&+x.price?+x.qty*+x.price:0)}))}:e.unit==='箱'?{q:+e.qty||0,u:'箱'}:{q:0,n:+e.qty||0,u:e.unit||''}),t:e.items&&e.items.length?'':(e.item||'')})}
+ else if(e.type==='undo')undoLast();
+ else if(e.type==='sup'){const n=(e.supplier||'').trim();if(n&&!D.sup.some(x=>x.n===n))D.sup.push({n,tel:e.phone||''})}
+ else if(e.type==='idea'){const P=PL(),u=me();P.ideas.push({id,u:u&&u.id,n:u&&u.name,ph:u&&u.ph,t:e.note||e.item,ts:Date.now(),st:0});PW(P)}
+ else if(e.type==='rev'){const dm=(D.dmRev||[]).includes(d);D.rev[d]=(dm?0:D.rev[d]||0)+a;if(dm)D.dmRev=D.dmRev.filter(k=>k!==d)}
+ else if(e.type==='memo')D.memo.push({id,t:e.note||e.item,d:/^\d{4}-\d\d-\d\d$/.test(e.date||'')?e.date:'',c:D.mcats.includes(e.cat)?e.cat:(D.mcats.includes('其他')?'其他':D.mcats[0]||''),x:0});
+ else if(e.type==='done'){const k=e.note||e.item,m=D.memo.find(x=>!x.x&&(x.t.includes(k)||k.includes(x.t)));if(m)m.x=1}
+ else{const c=e.type==='loss'?'损耗':(D.xcats.includes(e.cat)?e.cat:'其他');if(!D.xcats.includes(c))D.xcats.push(c);D.exp.push({id,d,a,c,t:[e.item||e.note,q].filter(Boolean).join(' ')})}});save()}
+function imgData(file,max,q){return new Promise(res=>{const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const k=Math.min(1,max/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*k;c.height=im.height*k;c.getContext('2d').drawImage(im,0,0,c.width,c.height);res(c.toDataURL('image/jpeg',q))};im.src=r.result};r.readAsDataURL(file)})}
+async function callAI(ms,md,nj){const key=isAdm()?localStorage.getItem('pl_key')||'':'',rs=await fetch(D.cfg.url,{method:'POST',headers:Object.assign({'Content-Type':'application/json'},key?{Authorization:'Bearer '+key}:{}),body:JSON.stringify(key?Object.assign({model:D.cfg.model||'deepseek-chat',messages:ms,max_tokens:800},nj?{}:{response_format:{type:'json_object'}}):{mode:md,messages:ms,json:nj?0:1})}),j=await rs.json().catch(()=>({}));if(!rs.ok)throw new Error('HTTP '+rs.status+' '+((j.error&&j.error.message)||''));const t=(j.choices&&j.choices[0].message.content)||j.reply||'';if(!t)throw new Error('返回内容为空');return{t,tok:j.usage&&j.usage.total_tokens}}
+const aiErr=x=>isAdm()?'连接失败：'+(x&&x.message||x)+(/fetch|network/i.test(x&&x.message||'')?'（多半是浏览器跨域被拦，或网络不通。直连只适合测试，正式上线要走服务器中转）':''):'连接失败，请稍后再试。';
+async function aiTest(){if(!D.cfg.url)return toast('先填接口地址');toast('测试中…');try{const r=await callAI([{role:'user',content:'你好，只回复“连接成功”四个字'}],'biz',true);alert('连接成功：'+r.t.slice(0,30))}catch(x){alert(aiErr(x))}}
+async function aiSend(img){if(!me()){loginOpen('up','注册后，慧管家和慧小小才能用，还能记住你的店和账本。每天有免费聊天字数');return}const i=$('ai_in'),m=(i&&i.value||'').trim()||(img?'（发了一张图片）':'');if(!m||busy)return;const L=D.chat[am],p=PL();
+ if(am==='biz'&&D.cfg.ob===2&&!img){D.cfg.shop=m.slice(0,20);D.cfg.ob=3;L.push({r:'u',c:m},{r:'a',c:'记住啦，“'+D.cfg.shop+'”！以后直接用大白话告诉我就行，点下面的例子试试 👇。有小票也可以点 📷 拍给我。',ch:QK});save();render();toGo();return}
+ L.push({r:'u',c:img?'📷 '+m:m});
+ const hit=(p.cfg.bad||'').split(/[,，\s]+/).filter(Boolean).find(w=>m.includes(w));if(hit){logEv('违规词命中',hit+'｜'+m.slice(0,40));L.push({r:'a',c:am==='gf'?p.cfg.badG:p.cfg.badR,ch:am==='gf'?GCH:BCH});save();render();toGo();return}
+ if(am==='biz'&&EMO.test(m)){L.push({r:'a',c:HO[Math.floor(Math.random()*HO.length)],ch:['去找慧小小','看看本月进货']});save();render();toGo();return}
+ if(am==='gf'&&DAT.test(m)){L.push({r:'a',c:HG[Math.floor(Math.random()*HG.length)],ch:['去找慧管家','随便聊聊']});save();render();toGo();return}
+ L.push({r:'a',c:'…'});busy=true;save();render();toGo();let r;
+ try{if(!D.cfg.url)r=img?{reply:'拍照识别要连上 AI 才能用，上线后开启。',entries:[]}:brainLocal(m);else{if(!canUse())throw 'q';
+  const h=L.slice(0,-2).slice(-12).map(x=>({role:x.r==='u'?'user':'assistant',content:x.r==='u'?x.c:(am==='biz'?JSON.stringify({text:x.c,entries:x.es||[]}):JSON.stringify({text:x.c,options:[],mem:[]}))})),
+  ms=[{role:'system',content:SYS[am](m)},...h,{role:'user',content:img?[{type:'text',text:m==='（发了一张图片）'?'这是小票或账单图片，请识别并整理成记账条目。':m},{type:'image_url',image_url:{url:img}}]:m}],
+  c=await callAI(ms,am);r=am==='biz'?parseAI(c.t):parseGF(c.t);charge(Math.max(20,m.length+(r.reply||'').length)+(img?300:0),c.tok||Math.ceil((m.length+JSON.stringify(h).length+c.t.length)/1.6)+(img?800:0),am)}}
+ catch(x){r={reply:x==='q'?'今天的免费字数用完了，余额也不够了。去“设置”充值就能继续聊。':aiErr(x),entries:[],go:x==='q'?'d':''}}
+ if(am==='biz'&&r.scope==='other')r={reply:HO[Math.floor(Math.random()*HO.length)],entries:[],chips:['去找慧小小','看看本月进货']};if(am==='gf'&&r.scope==='data')r.chips=['去找慧管家','随便聊聊'];const es=(r.entries||[]).filter(okE);if(am==='gf'&&D.cfg.url){memApply(r.mem);D.cfg.gl=Date.now();relUpdate(m,r.read)}L[L.length-1]={r:'a',c:r.reply,es:es.length?es:undefined,st:0,ch:cleanCh(r.chips,am),go:/^[hamqd]$/.test(r.go)?r.go:''};if(L.length>60)L.splice(0,L.length-60);busy=false;save();if(tab==='ai')render();toGo()}
+function vAI(){if(!D.cfg.gf)am='biz';const g=am==='gf',L=D.chat[am];
+ if(g){if(!L.length){L.push({r:'a',c:D.cfg.gn==='慧小小'?GREET:'你好，我是'+D.cfg.gn+'～你想怎么叫我都可以呀，那你呢，我该怎么叫你？😘',ch:GCH});save()}else{followUp();}}
+ else if(!D.cfg.ob){if(L.length)D.cfg.ob=3;else{D.cfg.ob=1;L.push({r:'a',c:INTRO,ob:1});save()}}
+ else if(D.cfg.ob>=3&&D.cfg.rd!==today()){D.cfg.rd=today();const R=remList();if(R.length)L.push({r:'a',c:'你好 👋 有 '+R.length+' 件事要提醒你：\n'+R.join('\n'),ch:['看看备忘','存个备忘','记一笔进货']});save()}
+ if(g){if(L.length)proGf(L)}else if(D.cfg.ob>=3)proBiz(L);const last=L.length-1,GO={h:'首页',a:'记账',m:'备忘',q:'生意圈',d:'设置'},
+ bub=(x,i)=>`<div class="cb${x.r==='u'?' me':''}"><div>${esc(x.c)}${x.ob&&D.cfg.ob===1?`<div class="chips" style="margin:10px 0 0">${IND.map(t=>`<button class="chip" style="--c:var(--ac)" data-a="obtype" data-t="${t}">${t}</button>`).join('')}</div>`:''}${x.es?`<div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--ln)">${x.es.map(e=>`<div>• ${esc(eD(e))}</div>`).join('')}${x.st===0?`<div class="row" style="margin:10px 0 0"><button class="btn2" data-a="aino" data-i="${i}">取消</button><button class="btn" style="flex:1;padding:10px" data-a="aiok" data-i="${i}">确认</button></div>`:`<div class="mu" style="margin-top:6px">${x.st===1?'✅ 已处理':'已取消'}</div>`}</div>`:''}${x.go?`<div class="row" style="margin:10px 0 0"><button class="btn2" style="flex:1" data-a="gt" data-t="${x.go}">打开${GO[x.go]}页 ›</button></div>`:''}</div></div>${i===last&&x.r==='a'&&x.ch&&x.ch.length&&!(x.ob&&D.cfg.ob===1)&&!(x.es&&x.st===0)?`<div class="chips" style="margin:-2px 0 12px">${x.ch.map(t=>`<button class="chip" style="--c:var(--ac)" data-a="aiq" data-t="${esc(t)}">${esc(t)}</button>`).join('')}</div>`:''}`;
+ return `<div style="${g?'--ac:#ff5c8a':''}"><div class="top"><b>${g?'💗 '+esc(D.cfg.gn):'🧑‍💼 慧管家'}</b><button class="x" data-a="aiclr">清空记录</button></div><div class="seg"><button data-a="aimode" data-m="biz" class="${g?'':'on'}">慧管家</button>${D.cfg.gf?`<button data-a="aimode" data-m="gf" class="${g?'on':''}">${esc(D.cfg.gn)}</button>`:''}</div>${qBar()}${g?`<div class="note">AI 虚拟角色，不是真人，仅供陪伴聊天 · 认识第 ${relDay()} 天 · ${STG[relStage()]}</div>`:''}${L.map(bub).join('')}<div style="height:56px"></div><div class="cin"><div>${g?'':'<label class="btn2" style="display:grid;place-items:center;padding:0 14px;font-size:20px">📷<input id="ai_img" type="file" accept="image/*" hidden></label>'}<input id="ai_in" placeholder="说点什么…" autocomplete="off"><button class="btn" style="width:auto;flex:none;white-space:nowrap;padding:0 20px" data-a="aisend">发送</button></div></div></div>`}
+const shopPn=()=>`<div class="pn"><h3>店铺信息</h3><div style="display:flex;gap:10px;align-items:center;margin-bottom:12px"><img class="ico" style="width:56px;height:56px" src="${D.cfg.logo||ICON}" alt=""><label class="btn2" style="display:grid;place-items:center;flex:1">上传 logo<input id="sp_l" type="file" accept="image/*" hidden></label><label class="btn2" style="display:grid;place-items:center;flex:1">${D.cfg.front?'换门头照片':'上传门头照片'}<input id="sp_f" type="file" accept="image/*" hidden></label></div><input id="sp_n" value="${esc(D.cfg.shop||'')}" placeholder="店名" style="margin-bottom:10px"><select id="sp_i" style="margin-bottom:10px"><option value="">选择行业</option>${IND.map(c=>`<option${c===D.cfg.ind?' selected':''}>${c}</option>`).join('')}</select><button class="btn" data-a="spsv">保存</button><div class="mu" style="font-size:12px;margin-top:8px">logo 和门头照片会显示在首页顶部。目前只保存在这台手机上，网站上线后会跟着账号同步。</div></div>`,
+rulePn=()=>{const c=PL().cfg;return `<div class="pn"><h3>AI 回答规则</h3><div class="lb">涉及政治时怎么回答</div><textarea id="ar_p" style="height:80px;font-size:14px;margin:0 0 10px">${esc(c.pol)}</textarea><div class="lb">低俗词（逗号隔开，命中直接拦截，不花 token）</div><input id="ar_b" value="${esc(c.bad)}" style="margin-bottom:10px"><div class="lb">慧管家遇到低俗词的回复</div><input id="ar_r" value="${esc(c.badR)}" style="margin-bottom:10px"><div class="lb">慧小小遇到低俗词的回复</div><input id="ar_g" value="${esc(c.badG)}" style="margin-bottom:10px"><button class="btn" data-a="arsv">保存</button></div>`};
+const cfgPn=()=>`<div class="pn"><h3>AI 与慧小小设置</h3>${isAdm()?`<div class="lb">AI 接口地址（测试填 https://api.deepseek.com/chat/completions）</div><input id="cf_u" value="${esc(D.cfg.url)}" placeholder="https://api.deepseek.com/chat/completions" style="margin-bottom:10px"><div class="lb">DeepSeek 密钥（只存在这台手机，不进备份）</div><input id="cf_k" type="password" placeholder="${localStorage.getItem('pl_key')?'已保存，要换请重新输入':'sk-…'}" style="margin-bottom:10px"><div class="lb">模型</div><input id="cf_m" value="${esc(D.cfg.model||'deepseek-chat')}" style="margin-bottom:10px"><button class="btn2" style="width:100%;margin-bottom:12px" data-a="aitest">测试连接</button>`:''}<div class="lb">你的称呼</div><input id="cf_n" value="${esc(D.cfg.nick)}" style="margin-bottom:10px"><div class="row"><input id="cf_g" value="${esc(D.cfg.gn)}" placeholder="名字，默认慧小小"><select id="cf_f"><option value="1"${D.cfg.gf?' selected':''}>开</option><option value="0"${D.cfg.gf?'':' selected'}>关</option></select></div><div class="lb">慧小小的身份</div><select id="cf_y" style="margin-bottom:10px">${[...Object.keys(STY),'自定义'].map(k=>`<option${(D.cfg.sty||'默认')===k?' selected':''}>${k}</option>`).join('')}</select><div class="lb">让慧小小知道我的生意概况（她才能关心你、帮你理思路）</div><select id="cf_b" style="margin-bottom:10px"><option value="0"${D.cfg.shareBiz?'':' selected'}>不让</option><option value="1"${D.cfg.shareBiz?' selected':''}>让</option></select><input id="cf_s2" value="${esc(D.cfg.sty2||'')}" placeholder="选“自定义”时在这里写，比如：高冷学姐，嘴毒心软" style="margin-bottom:10px"><button class="btn" data-a="cfgsv">保存</button></div>`;
+function aiH(a,ds){
+ if(a==='aimode'){am=ds.m;render();toGo()}
+ else if(a==='aisend')aiSend();
+ else if(a==='aiq'){if(ds.t==='去找慧小小'){am='gf';render();toGo()}else if(ds.t==='撤销刚才的记账'){const ok=undoLast();D.chat.biz.push({r:'u',c:ds.t},{r:'a',c:ok?'已撤销刚才那次记账 ✅':'没有可以撤销的记录了。',ch:BCH});save();render();toGo()}else if(ds.t==='去找慧管家'){am='biz';render();toGo()}else if(ds.t==='没有了，谢谢'){D.chat[am].push({r:'u',c:ds.t},{r:'a',c:'好嘞，有事随时叫我 😊',ch:BCH});save();render();toGo()}else{$('ai_in').value=ds.t;aiSend()}}
+ else if(a==='obtype'){D.chat.biz.push({r:'u',c:ds.t},{r:'a',c:'好的，'+ds.t+'！你的店叫什么名字？直接打字告诉我就行。'});D.cfg.ind=ds.t;D.cfg.ob=2;save();render();toGo()}
+ else if(a==='aiok'){const x=D.chat.biz[+ds.i];if(x&&x.es&&x.st===0){if(!x.es.some(e=>e.type==='undo'))snapTake();applyEs(x.es);x.st=1;D.chat.biz.push({r:'a',c:'记好啦 ✅ 还需要我帮你做什么？比如存个备忘、设个提醒，或者看看账。',ch:['撤销刚才的记账','存个备忘','设个提醒','没有了，谢谢']});save();render();toGo()}}
+ else if(a==='aino'){const x=D.chat.biz[+ds.i];if(x){x.st=2;save();render()}}
+ else if(a==='aiclr'){D.chat[am]=[];if(am==='biz'&&D.cfg.ob<3)D.cfg.ob=0;PEND=null;PENDM=false;save();render()}
+ else if(a==='aitest')aiTest();
+ else if(a==='gobiz'){am='biz';tab='ai';render();scrollTo(0,0)}
+ else if(a==='gogf'){am='gf';tab='ai';render();scrollTo(0,0)}
+ else if(a==='reg')loginOpen('up')
+ else if(a==='spsv'){if(!me()){loginOpen('up','注册后才能保存店铺资料');return true}D.cfg.shop=$('sp_n').value.trim().slice(0,20);D.cfg.ind=$('sp_i').value;if(D.cfg.shop&&!(D.cfg.ob>=3))D.cfg.ob=D.chat.biz.length?3:0;save();render();toast('已保存')}
+ else if(a==='memdel'){D.mem=(D.mem||[]).filter(x=>x.id!==ds.id);save();render()}
+ else if(a==='memclr'){if(confirm('清空慧小小的全部记忆？'))D.mem=[],save(),render()}
+ else if(a==='adq'){qc=ds.c;render()}
+ else if(a==='adnew')adOpen();
+ else if(a==='adsv')adSave();
+ else if(a==='adint'){if(!me()){loginOpen('up','注册后才能留联系方式，我们好联系你');return true}const P=PL(),u=me(),ad=P.ads.find(x=>String(x.id)===ds.id);if(u&&ad){if(P.leads.some(l=>l.u===u.id&&l.ad===ad.id&&!l.done))toast('已经通知过了，请耐心等联系');else{P.leads.push({id:Date.now(),ad:ad.id,t:ad.t,u:u.id,n:u.name,ph:u.ph,ts:Date.now(),done:0});PW(P);logEv('生意圈意向',ad.t);toast('已通知，我们会尽快联系你')}}}
+ else if(a==='addel'){const P=PL();P.ads=P.ads.filter(x=>String(x.id)!==ds.id);PW(P);logEv('广告操作','删除 '+ds.id);render();toast('已删除')}
+ else if(a==='adrp')toast('已收到举报，谢谢');
+ else if(a==='cfgsv'){if(!me()){loginOpen('up','注册后才能保存设置');return true}if($('cf_u')){const u=$('cf_u').value.trim(),k=$('cf_k').value.trim();if(/^sk-/.test(u))return toast('这是密钥，请填到下面的“密钥”框'),true;D.cfg.url=u;D.cfg.model=$('cf_m').value.trim();if(k)try{localStorage.setItem('pl_key',k)}catch(x){}}D.cfg.nick=$('cf_n').value.trim();D.cfg.gn=$('cf_g').value.trim()||'慧小小';D.cfg.gf=+$('cf_f').value;D.cfg.sty=$('cf_y').value;D.cfg.sty2=$('cf_s2').value.trim().slice(0,100);D.cfg.shareBiz=+$('cf_b').value;save();render();toast('已保存')}
+ else if(a==='repnew'){if(!me()){loginOpen('up','注册后才能投诉举报');return true}$('sh').innerHTML=`<div><h3>投诉 / 举报</h3><textarea id="id_t" placeholder="请写清楚对象和问题，比如：某条回复有违规内容、某条广告有问题" style="height:110px;font-size:15px;margin:0 0 10px"></textarea><div class="row" style="margin:0"><button class="btn2" data-a="xcl">取消</button><button class="btn" style="flex:1" data-a="idsv" data-k="举报">提交</button></div></div>`;$('sh').classList.add('on')}
+ else if(a==='ideanew'){if(!me()){loginOpen('up','注册后才能提交想法');return true}$('sh').innerHTML=`<div><h3>提交想法</h3><textarea id="id_t" placeholder="你希望平台多加什么功能？" style="height:110px;font-size:15px;margin:0 0 10px"></textarea><div class="row" style="margin:0"><button class="btn2" data-a="xcl">取消</button><button class="btn" style="flex:1" data-a="idsv">提交</button></div></div>`;$('sh').classList.add('on')}
+ else if(a==='idsv'){const t=$('id_t').value.trim(),P=PL(),u=me();if(!t)return toast('写点内容吧'),true;P.ideas.push({id:Date.now(),u:u&&u.id,n:u&&u.name,ph:u&&u.ph,t,ts:Date.now(),st:0,k:ds.k||'想法'});PW(P);logEv(ds.k==='举报'?'投诉举报':'提交想法',t.slice(0,40));cl();toast(ds.k==='举报'?'已收到，我们会尽快处理':'已收到，谢谢你的想法')}
+ else return acctH(a,ds);return true}
+document.addEventListener('change',e=>{const t=e.target;if(!t.files||!t.files[0])return;if(!me()&&t.id!=='ai_img'){loginOpen('up','注册后才能上传和保存');t.value='';return}if(t.id==='ai_img')imgData(t.files[0],1024,.7).then(u=>aiSend(u));else if(t.id==='sp_l')imgData(t.files[0],128,.8).then(u=>{D.cfg.logo=u;save();render();toast('logo 已更新')});else if(t.id==='dv_q'&&isAdm())imgData(t.files[0],400,.85).then(u=>{const P=PL();P.cfg.qr=u;PW(P);render();toast('二维码已更新')});else if(t.id==='sp_f')imgData(t.files[0],900,.7).then(u=>{D.cfg.front=u;save();render();toast('门头照片已更新')})});
+document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='ai_in')aiSend()});
+function PL(){let p;try{p=JSON.parse(localStorage.getItem('pl_acct'))}catch(x){}p=p||{};p.users=p.users||[];p.codes=p.codes||[];p.log=p.log||[];p.ads=p.ads||[];p.events=p.events||[];p.leads=p.leads||[];p.ideas=p.ideas||[];if(!p.adSeed){p.adSeed=1;p.ads.push({id:1,cat:'酒水饮料',t:'红酒 100 瓶急处理',q:'100 瓶',p:'价格面议',a:'北宁',c:TEL,u:1,e:'2099-12-31',pin:1,demo:1},{id:2,cat:'酒水饮料',t:'07 冰红茶 一批需处理',q:'一批',p:'低价清货',a:'北宁',c:TEL,u:1,e:'2099-12-31',demo:1});PW(p)}p.s=p.s||'';p.cfg=Object.assign({cost:0.003,mk:10,free:20000,freeC:1000,perYuan:1500,keep:183,pol:'政治、政党、领导人、选举、敏感时事一律不评价、不站队，礼貌地说“这类话题我不聊，咱们聊聊你的生意吧”，然后回到记账和经营。',bad:'鸡巴,操逼,做爱,约炮',badR:'这个我不接哦～咱们聊点正经的，要不要看看今天的账？',badG:'你想哪儿去了……这个不聊，换一个。',co:'',qr:'',dev:'300|小调整：改界面、加一个字段\n500|新增一个功能页面或报表\n1000|专属定制：对接你的业务流程'},p.cfg);if(p.cfg.badG==='哎呀，你好坏～这个我不说啦，换个话题好不好？')p.cfg.badG='你想哪儿去了……这个不聊，换一个。';p.log.forEach(x=>{if(x.vis==null){x.vis=Math.round((x.tok||0)/20);x.fp=Math.round((x.fp||0)/20);x.pp=Math.round((x.pp||0)/20)}});return p}
+function PW(p){try{localStorage.setItem('pl_acct',JSON.stringify(p))}catch(x){}}
+function me(){const p=PL();return p.users.find(x=>x.id===p.s&&!x.ban)}
+function isAdm(){const u=me();return !!(u&&u.adm)}
+const hh=s=>{let h=5381;for(const c of s)h=((h<<5)+h+c.charCodeAt(0))|0;return h.toString(36)};
+function qInfo(u,p){const t=today();if(u.fd!==t){u.fd=t;u.fu=0}if(u.fv!==2){u.fv=2;u.fu=0}return{fr:Math.max(0,p.cfg.freeC-u.fu)}}
+function qStat(){const p=PL(),u=me();if(!u)return null;const q=qInfo(u,p),pc=Math.floor(u.bal*p.cfg.perYuan);return{fr:q.fr,free:p.cfg.freeC,bal:u.bal,pc,tot:q.fr+pc}}
+function canUse(){const s=qStat();return !!s&&s.tot>=10}
+function charge(vis,tok,mode){const p=PL(),u=p.users.find(x=>x.id===p.s);if(!u)return;const q=qInfo(u,p),fp=Math.min(vis,q.fr),pp=vis-fp,fee=Math.min(u.bal,pp/p.cfg.perYuan);u.fu+=fp;u.bal=Math.max(0,+(u.bal-fee).toFixed(4));p.log.push({ts:Date.now(),u:u.id,tok,vis,fp,pp,fee,mode});p.events.push({ts:Date.now(),u:u.id,t:'AI对话',d:(mode==='gf'?'慧小小 ':'慧管家 ')+vis+'字'+(fee>0?' 付费':'')});if(p.log.length>3000)p.log.splice(0,p.log.length-3000);PW(p)}
+function loginOpen(m,msg){m=m||'in';let e=$('lg');if(!e){e=document.createElement('div');e.id='lg';document.body.appendChild(e)}
+ e.innerHTML=`<div style="max-width:420px;margin:0 auto;padding:20px 24px 56px"><div style="text-align:right;margin-bottom:24px"><button class="x" data-l="close">先不注册，逛逛 ✕</button></div><div class="brand" style="justify-content:center;margin-bottom:6px"><img class="ico" src="${ICON}" alt=""><b>${APP}</b></div><div class="mu" style="text-align:center;margin-bottom:16px">小店记账 · 免费使用</div>${msg?`<div class="tg" style="display:block;text-align:center;margin:0 0 16px;padding:10px">${esc(msg)}</div>`:''}<div class="seg"><button class="${m==='in'?'on':''}" data-l="in">登录</button><button class="${m==='up'?'on':''}" data-l="up">注册</button></div>${m==='up'?'<input id="lg_n" placeholder="昵称（店名也行）" style="margin-bottom:10px">':''}<input id="lg_p" type="tel" placeholder="手机号" style="margin-bottom:10px"><input id="lg_w" type="password" placeholder="密码（至少 6 位）" style="margin-bottom:16px"><button class="btn" data-l="go${m}">${m==='in'?'登录':'注册并进入'}</button><div class="mu" style="font-size:12px;text-align:center;margin-top:14px"></div><div class="mu" style="font-size:13px;margin-top:18px;line-height:1.9">怎么用：<br>① 点上面“注册”，填手机号和密码<br>② 进去后“慧管家”会带你一步步设置店铺<br>③ 直接对管家说话就能记账、存备忘</div></div>`;
+ e.onclick=ev=>{const t=ev.target.closest('[data-l]');if(!t)return;const l=t.dataset.l;if(l==='close'){e.remove();return}if(l==='in'||l==='up')return loginOpen(l,msg);lgGo(l==='goup')}}
+function lgGo(up){const p=PL(),ph=$('lg_p').value.trim(),pw=$('lg_w').value;if(ph.length<6||pw.length<6)return toast('手机号太短，或密码不足 6 位');let u=p.users.find(x=>x.ph===ph);
+ if(up){if(u)return toast('这个手机号已注册，请直接登录');u={id:Date.now().toString(36),ph,pw:hh(ph+pw),name:$('lg_n').value.trim()||ph.slice(-4),adm:p.users.length?0:1,bal:0,fd:'',fu:0,ct:Date.now()};p.users.push(u);{const o=localStorage.getItem('pl_v2');if(o)try{localStorage.setItem('pl_v2_'+u.id,o);localStorage.removeItem('pl_v2')}catch(x){}}}
+ else if(!u||u.pw!==hh(ph+pw)){p.events.push({ts:Date.now(),u:u?u.id:'',t:'登录失败',d:ph});PW(p);return toast('手机号或密码不对')}
+ if(u.ban)return toast('账号已停用，请联系管理员');u.ll=u.la=Date.now();p.events.push({ts:Date.now(),u:u.id,t:up?'注册':'登录',d:ph});p.s=u.id;PW(p);location.reload()}
+function qBar(inn){const s=qStat();if(!s)return '<div class="pn" style="padding:12px 14px;margin:0 0 12px;font-size:13px"><span class="mu">注册后每天有免费聊天字数 </span><a class="lk" data-a="reg">注册 / 登录 ›</a></div>';const pct=s.free?Math.min(100,s.fr/s.free*100):0,low=s.tot<200;
+ return `<div class="${inn?'':'pn'}" style="padding:12px 14px;margin:${inn?'10px 0':'0 0 12px'};${inn?'background:var(--bg);border-radius:14px':''}"><div style="display:flex;justify-content:space-between;font-size:13px;gap:8px"><span>今日免费 <b>${f(s.fr)}</b> / ${f(s.free)} 字</span><span>余额 <b>¥${f(s.bal)}</b> ≈ ${f(s.pc)} 字</span></div><div style="height:6px;border-radius:3px;background:var(--ln);margin:8px 0"><div style="height:6px;border-radius:3px;width:${pct}%;background:${low?'#ff6b6b':'var(--ac)'}"></div></div><div class="mu" style="font-size:12px;display:flex;justify-content:space-between"><span>${low?'⚠️ 快用完了':'你说的 + 回你的，都算字数'}</span><a class="lk" data-a="gt" data-t="d">充值 ›</a></div></div>`}
+function unitInfo(){const p=PL(),L=p.log.filter(x=>x.vis>0),ts=L.reduce((t,x)=>t+x.tok,0),cs=L.reduce((t,x)=>t+x.vis,0),k=L.length>=5&&cs?ts/cs:20,cpc=k*p.cfg.cost/1000,be=Math.floor(1/cpc);return `${L.length>=5?'实测':'暂按预估'}每个字约耗 ${k.toFixed(1)} tokens，你的成本约 ${(cpc*100).toFixed(3)} 分/字。1 元最多送 ${f(be)} 字才不亏，你现在定 ${f(p.cfg.perYuan)} 字/元，约赚 ${(be/p.cfg.perYuan).toFixed(1)} 倍。`}
+function acctPn(){const p=PL(),u=me();if(!u)return `<div class="pn"><h3>账号</h3><div class="mu" style="font-size:13px;margin-bottom:10px;line-height:1.7">你现在是游客，记账功能可以直接用。注册后可以：保存店铺资料、使用慧管家和慧小小（每天有免费字数）、数据跟着账号走。</div><button class="btn" data-a="reg">注册 / 登录</button></div>`;const lg=p.log.filter(x=>x.u===u.id),L8=lg.slice(-8).reverse(),av=Math.max(20,Math.round(lg.length>=5?lg.reduce((t,x)=>t+x.vis,0)/lg.length:60));
+ return `<div class="pn"><h3>账号与额度</h3><div class="kv"><span>${esc(u.name)}${u.adm?' <span class="tg">管理员</span>':''}</span><span class="mu">${esc(u.ph)}</span></div>${qBar(1)}<div class="lb">充值换算（你说的 + 她回的，都算字数）</div>${[10,30,50,100].map(y=>`<div class="kv"><b>${y} 元</b><span class="mu">≈ ${f(y*p.cfg.perYuan)} 字 ≈ ${f(Math.round(y*p.cfg.perYuan/av))} 句来回</span></div>`).join('')}<div class="row" style="margin-top:10px"><input id="rc" placeholder="输入充值码"><button class="btn2" data-a="redeem">充值</button></div><div class="mu" style="font-size:12px;margin:-4px 0 10px">没有充值码？联系 ${TEL}（微信同号），付款后获取。</div>${L8.length?acc('ul','最近使用',L8.map(x=>`<div class="kv"><span class="mu">${fts(x.ts)}${x.mode==='gf'?' · 慧小小':' · 慧管家'}</span><span>${f(x.vis)} 字${x.fee?' · −¥'+(+x.fee.toFixed(3)):' · 免费'}</span></div>`).join('')):''}<div class="row" style="margin:0">${u.adm?'<button class="btn2" style="flex:1" data-a="gt" data-t="adm">管理后台</button>':''}<button class="btn2" style="flex:1" data-a="lgout">退出登录</button></div></div>`}
+function vAdm(){if(!isAdm())return '<div class="emp"><p>没有权限</p></div>';const p=PL(),t=today(),ds=new Date().toDateString(),
+ sm=L=>{const o={fp:0,pp:0,fee:0,n:L.length,tok:0};L.forEach(x=>{o.fp+=x.fp;o.pp+=x.pp;o.fee+=x.fee;o.tok+=x.tok});o.cost=o.tok/1000*p.cfg.cost;o.gain=o.fee-o.cost;return o},
+ bx=(n,o)=>`<div class="pn"><h3>${n}</h3><div class="m4"><div><small>免费字数</small><b>${f(o.fp)}</b></div><div><small>收费字数</small><b>${f(o.pp)}</b></div><div><small>用户付费（元）</small><b>${f(o.fee)}</b></div><div><small>你的成本（元）</small><b>${f(o.cost)}</b></div></div><div class="kv"><span class="mu">毛利（含免费部分的成本）</span><b class="${o.gain<0?'neg':'pos'}">${sg(+o.gain.toFixed(2))}</b></div><div class="mu" style="font-size:12px">共 ${o.n} 次对话</div></div>`;
+ return `<div class="top"><b>管理后台</b><a class="lk" data-a="gt" data-t="d">‹ 返回设置</a></div>${bx('今天',sm(p.log.filter(x=>new Date(x.ts).toDateString()===ds)))}${bx('累计',sm(p.log))}
+<div class="pn"><h3>价格与免费额度</h3><div class="lb">你的成本价（元 / 千 tokens，按 DeepSeek 实际价格填）</div><input id="ac_c" type="number" step="any" value="${p.cfg.cost}" style="margin-bottom:10px"><div class="lb">1 元可聊多少字（你说的 + 她回的，合计）</div><input id="ac_p" type="number" step="any" value="${p.cfg.perYuan}" style="margin-bottom:10px"><div class="lb">每人每天免费字数</div><input id="ac_f" type="number" value="${p.cfg.freeC}" style="margin-bottom:10px"><div class="mu" style="font-size:12px;margin-bottom:10px">${unitInfo()}</div><button class="btn" data-a="acsv">保存</button></div>
+${leadPn()}${devPn()}${rulePn()}${userPn()}${logPn()}${compPn()}<div class="pn"><h3>充值码</h3><div class="row"><input id="cg_a" type="number" placeholder="面额（元）"><button class="btn2" data-a="cgen">生成</button></div>${p.codes.slice(-10).reverse().map(c=>`<div class="kv" data-a="ccp" data-c="${c.c}"><b>${c.c}</b><span class="${c.used?'mu':''}">${c.amt} 元 · ${c.used?'已用':'点击复制'}</span></div>`).join('')||'<div class="mu" style="font-size:13px">用户付款后，在这里生成充值码发给他。</div>'}</div>`}
+function acctH(a,ds){const p=PL(),u=p.users.find(x=>x.id===p.s);if(u&&u.adm&&ADM_A[a])p.events.push({ts:Date.now(),u:u.id,t:'管理操作',d:ADM_A[a]});
+ if(a==='redeem'){const c=$('rc').value.trim().toUpperCase(),k=p.codes.find(x=>x.c===c);if(!u||!k)toast('充值码不对');else if(k.used)toast('这个充值码已被使用');else{k.used=Date.now();k.by=u.id;u.bal=+(u.bal+k.amt).toFixed(4);PW(p);render();toast('已充值 '+k.amt+' 元')}}
+ else if(a==='lgout'){p.events.push({ts:Date.now(),u:p.s,t:'登录',d:'退出登录'});p.s='';PW(p);try{localStorage.removeItem('pl_v2')}catch(x){}location.reload()}
+ else if(!(u&&u.adm))return false;
+ else if(a==='cgen'){const v=parseFloat($('cg_a').value);if(!(v>0))toast('请输入金额');else{p.codes.push({c:'HJZ'+Math.random().toString(36).slice(2,8).toUpperCase(),amt:v,used:0});PW(p);render()}}
+ else if(a==='ccp')toast(cpy(ds.c)?'已复制 '+ds.c:'复制失败');
+ else if(a==='uadd'){const v=parseFloat(prompt('给这个用户加多少元余额？')||''),w=p.users.find(x=>x.id===ds.id);if(v>0&&w){w.bal=+(w.bal+v).toFixed(4);PW(p);render();toast('已加余额')}}
+ else if(a==='arsv'){Object.assign(p.cfg,{pol:$('ar_p').value.trim(),bad:$('ar_b').value.trim(),badR:$('ar_r').value.trim(),badG:$('ar_g').value.trim()});PW(p);toast('已保存')}
+ else if(a==='ldone'){const l=p.leads.find(x=>String(x.id)===ds.id);if(l){l.done=1;PW(p);render()}}
+ else if(a==='idone'){const l=p.ideas.find(x=>String(x.id)===ds.id);if(l){l.st=1;PW(p);render()}}
+ else if(a==='devsv'){p.cfg.dev=$('dv_t').value.trim();p.cfg.co=$('dv_c').value.trim();PW(p);toast('已保存')}
+ else if(acctX(a,ds,p,u));
+ else if(a==='acsv'){const c=parseFloat($('ac_c').value),pe=parseFloat($('ac_p').value),fr=parseInt($('ac_f').value);if(c>0&&pe>0&&fr>=0){Object.assign(p.cfg,{cost:c,perYuan:pe,freeC:fr});PW(p);render();toast('已保存')}else toast('数字不对')}
+ else return false;return true}
+const tot=e=>+e.amount>0?+e.amount:(e.items||[]).reduce((t,x)=>t+(+x.amount||(+x.qty*+x.price)||0),0),
+devText=()=>PL().cfg.dev.split('\n').filter(Boolean).map(l=>{const a=l.split('|');return a[0]+'元：'+(a[1]||'')}).join('；'),
+itemAgg=m=>{const A={};D.buy.filter(r=>r.d.startsWith(m)&&r.it).forEach(r=>r.it.forEach(i=>{const k=i.n+'|'+(i.u||''),o=A[k]=A[k]||{n:i.n,u:i.u||'',q:0,a:0};o.q+=i.q||0;o.a+=i.a||0}));return Object.values(A).sort((x,y)=>y.a-x.a)},
+itemPn=()=>{const L=itemAgg(today().slice(0,7)).slice(0,8);return L.length?`<div class="pn"><h3>本月进货品名</h3>${L.map(o=>`<div class="kv"><span>${esc(o.n)} <small class="mu">${f(o.q)}${esc(o.u)}</small></span><span>${f(o.a)}${o.q&&o.a?` <small class="mu">均价 ${f(o.a/o.q)}/${esc(o.u||'份')}</small>`:''}</span></div>`).join('')}</div>`:''},
+parseItems=t=>t.split('\n').map(l=>{const x=/^\s*(\S+?)\s+(\d+(?:\.\d+)?)\s*([^\d\s]{0,2})\s*(?:(\d+(?:\.\d+)?))?\s*$/.exec(l);if(!x)return null;const q=+x[2],p=+x[4]||0;return{n:x[1],q,u:x[3]||'',p,a:+(q*p).toFixed(2)}}).filter(Boolean),
+itm=()=>{const it=parseItems(($('bd')||{value:''}).value);return it.length?{it}:{}};
+document.addEventListener('input',e=>{if(e.target.id==='bd'){const a=$('ba'),s=parseItems(e.target.value).reduce((t,i)=>t+i.a,0);if(a&&s>0&&(a.value===''||a.dataset.auto)){a.value=s;a.dataset.auto=1}}else if(e.target.id==='ba')delete e.target.dataset.auto});
+const helpPn=()=>{const c=PL().cfg;return `<div class="pn"><h3>定制与建议</h3><div class="mu" style="font-size:13px;margin-bottom:8px">需要平台没有的功能？可以提想法，也可以私人定制开发：</div>${c.dev.split('\n').filter(Boolean).map(l=>{const a=l.split('|');return `<div class="kv"><b>${esc(a[0])} 元</b><span class="mu" style="text-align:right">${esc(a[1]||'')}</span></div>`}).join('')}${c.co?`<div class="mu" style="margin:8px 0">联系：${esc(c.co)}</div>`:''}${c.qr?`<img src="${c.qr}" alt="" style="width:160px;display:block;margin:8px auto;border-radius:12px">`:''}<div class="row" style="margin:0"><button class="btn" style="flex:1" data-a="ideanew">提交我的想法</button><button class="btn2" style="flex:1" data-a="repnew">投诉 / 举报</button></div><div class="mu" style="font-size:12px;margin-top:6px">投诉举报由管理员处理，一般 3 个工作日内反馈。</div></div>`},
+leadPn=()=>{const P=PL(),I=P.ideas.filter(x=>!x.st).slice(-10).reverse(),Ld=P.leads.filter(x=>!x.done).slice(-10).reverse();return `<div class="pn"><h3>意向客户（${Ld.length}）</h3>${Ld.map(l=>`<div class="kv"><span>${esc(l.n)} <small class="mu">${esc(l.ph)}</small><br><small class="mu">想要：${esc(l.t)}</small></span><button class="btn2" style="min-height:36px" data-a="ldone" data-id="${l.id}">已联系</button></div>`).join('')||'<div class="mu" style="font-size:13px">还没有人点“我感兴趣”。</div>'}</div><div class="pn"><h3>用户想法（${I.length}）</h3>${I.map(x=>`<div class="kv"><span>${x.k==='举报'?'<span class="tg u">举报</span> ':''}${esc(x.t)}<br><small class="mu">${esc(x.n||'')} ${esc(x.ph||'')}</small></span><button class="btn2" style="min-height:36px" data-a="idone" data-id="${x.id}">已处理</button></div>`).join('')||'<div class="mu" style="font-size:13px">还没有想法。</div>'}</div>`},
+devPn=()=>{const c=PL().cfg;return `<div class="pn"><h3>定制价格与联系</h3><div class="lb">每行一档：价格|说明</div><textarea id="dv_t" style="height:96px;font-size:14px;margin:0 0 10px">${esc(c.dev)}</textarea><div class="lb">联系人（公司 + 姓名）</div><input id="dv_c" value="${esc(c.co)}" placeholder="比如：某某公司 某某某" style="margin-bottom:10px"><label class="btn2" style="display:grid;place-items:center;margin-bottom:10px">${c.qr?'换联系人二维码':'上传联系人二维码'}<input id="dv_q" type="file" accept="image/*" hidden></label><button class="btn" data-a="devsv">保存</button></div>`};
+const MK=['基本','工作','老家','家人','喜恶','正在做','其他'],
+FU=['喂，几天没动静了。上次那事，“X”，后来咋样了？','哟，还知道回来？“X”那事后来咋样了？','消失这么久……“X”后来咋样了，说说。'],
+bg=s=>{s=String(s).replace(/\s/g,'');const a=new Set();for(let i=0;i<s.length-1;i++)a.add(s.slice(i,i+2));return a},
+simil=(a,b)=>{const x=bg(a),y=bg(b);if(!x.size||!y.size)return 0;let n=0;x.forEach(v=>{if(y.has(v))n++});return n/(x.size+y.size-n)};
+function recall(msg){const M=D.mem||[],b=bg(msg),now=Date.now(),sc=M.map(m=>{let o=0;bg(m.t+(m.kw||[]).join('')).forEach(v=>{if(b.has(v))o+=1});(m.kw||[]).forEach(w=>{if(w&&msg.includes(w))o+=2});const im=m.imp||1,rec=now-m.up<6048e5,lp=m.k==='喜恶'||im>=3;return{m,o,s:o*2+im*.7+(rec?1:0)+(lp?.8:0)+(m.th?1:0),bk:rec&&im>=2||lp||m.th}}),
+ rel=sc.filter(x=>x.o>0).sort((x,y)=>y.s-x.s).slice(0,4).map(x=>x.m),bk=sc.filter(x=>!x.o&&x.bk).sort((x,y)=>y.s-x.s).slice(0,2).map(x=>x.m);[...rel,...bk].forEach(m=>m.lu=now);return{rel,bk}}
+function memApply(ops){if(!Array.isArray(ops))return;D.mem=D.mem||[];const now=Date.now(),cl=o=>({p:String(o.person||'对方').slice(0,12),kw:(Array.isArray(o.kw)?o.kw:[]).map(String).slice(0,5),imp:Math.min(3,Math.max(1,+o.importance||1)),th:o.thread?1:0}),
+ nw=(t,k,o)=>Object.assign({id:'m'+now.toString(36)+Math.random().toString(36).slice(2,5),k,t,ts:now,up:now,lu:0,ta:0},cl(o));
+ ops.slice(0,6).forEach(o=>{if(!o||!o.op)return;const t=String(o.text||'').trim().slice(0,60),k=MK.includes(o.kind)?o.kind:'其他';
+  if(o.op==='add'&&t){const d=D.mem.find(m=>m.t===t||simil(m.t,t)>.7);if(d){d.up=now;if(o.thread!=null)d.th=o.thread?1:0;if(+o.importance>(d.imp||1))d.imp=Math.min(3,+o.importance);if(Array.isArray(o.kw))d.kw=[...new Set([...(d.kw||[]),...o.kw.map(String)])].slice(0,6)}else D.mem.push(nw(t,k,o))}
+  else if(o.op==='update'){const m=D.mem.find(x=>x.id===o.id);if(m){if(t)m.t=t;if(MK.includes(o.kind))m.k=k;if(o.person)m.p=String(o.person).slice(0,12);if(Array.isArray(o.kw)&&o.kw.length)m.kw=o.kw.map(String).slice(0,5);if(o.importance)m.imp=Math.min(3,Math.max(1,+o.importance||1));if(o.thread!=null)m.th=o.thread?1:0;m.up=now}else if(t)D.mem.push(nw(t,k,o))}
+  else if(o.op==='del')D.mem=D.mem.filter(x=>x.id!==o.id)});
+ if(D.mem.length>200){D.mem.sort((a,b)=>(b.th-a.th)||((b.imp||1)-(a.imp||1))||(b.up-a.up));D.mem.length=200}}
+function parseGF(t){const j=jx(t);if(j){const r=j.reply!=null?j.reply:j.text;if(typeof r==='string')return{reply:r,entries:[],mem:j.mem,read:j.read,scope:j.scope,chips:Array.isArray(j.options)?j.options:j.chips}}return{reply:salv(t),entries:[],mem:[]}}
+function followUp(){if(!D.cfg.gl||(Date.now()-D.cfg.gl)/864e5<3||D.cfg.gq===today())return;const t=(D.mem||[]).filter(x=>(x.th||(x.imp||1)>=2)&&Date.now()-(x.ta||0)>2*864e5).sort((a,b)=>(b.th-a.th)||(b.up-a.up))[0];if(!t)return;t.ta=Date.now();D.cfg.gq=today();D.chat.gf.push({r:'a',c:FU[Math.floor(Math.random()*FU.length)].replace('X',t.t),ch:['搞定了','还没呢','别提了']});save()}
+const memPn=()=>{const M=(D.mem||[]).slice().sort((a,b)=>b.up-a.up).slice(0,30);return `<div class="pn"><h3>${esc(D.cfg.gn)}记住的事（${(D.mem||[]).length}）</h3>${M.map(m=>`<div class="kv"><span>${m.p&&m.p!=='对方'?esc(m.p)+'：':''}${esc(m.t)}<br><small class="mu">${esc(m.k)}${m.th?' · 进行中':''}</small></span><button class="btn2" style="min-height:34px" data-a="memdel" data-id="${m.id}">忘掉</button></div>`).join('')||'<div class="mu" style="font-size:13px">还没记住什么。多聊聊，她会慢慢记住你亲口说过的事。</div>'}${M.length?'<button class="btn2" style="width:100%;margin-top:8px;color:#ff6b6b" data-a="memclr">清空全部记忆</button>':''}<div class="mu" style="font-size:12px;margin-top:8px">她只记你亲口说过的事，记错了可以直接纠正她，也可以在这里删掉。目前只存在这台手机上。</div></div>`};
+let LGF={t:'',u:''},LPV='';
+const EVT=['注册','登录','登录失败','访问页面','AI对话','违规词命中','管理操作','生意圈意向','提交想法','投诉举报','广告操作'],
+ADM_A={cgen:'生成充值码',uadd:'给用户加余额',acsv:'修改价格和免费额度',arsv:'修改AI回答规则',devsv:'修改定制报价与联系',ldone:'标记意向已联系',idone:'标记想法/举报已处理',kpsv:'修改记录保留天数'},
+tmz=t=>t?new Date(t).toLocaleString('zh-CN'):'-',
+unm=(p,id)=>{const u=p.users.find(x=>x.id===id);return u?u.name+' '+u.ph:'游客'};
+function logEv(t,d,uid){try{const p=PL(),u=uid!=null?uid:p.s,now=Date.now(),k=now-(p.cfg.keep||183)*864e5;p.events.push({ts:now,u:u||'',t,d:String(d||'').slice(0,120)});if(p.events.length>8000||p.events[0].ts<k)p.events=p.events.filter(e=>e.ts>=k).slice(-8000);const x=p.users.find(y=>y.id===u);if(x)x.la=now;PW(p)}catch(e){}}
+function pvLog(){if(!me()||tab===LPV)return;LPV=tab;logEv('访问页面',{h:'首页',a:'记账',m:'备忘',ai:'管家',q:'生意圈',d:'设置',adm:'管理后台'}[tab]||tab)}
+function csvDl(name,rows){const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"',a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+rows.map(r=>r.map(q).join(',')).join('\r\n')],{type:'text/csv;charset=utf-8'}));a.download=name+'_'+today()+'.csv';document.body.appendChild(a);a.click();a.remove()}
+const userPn=()=>{const p=PL(),t=today(),sv=id=>p.log.filter(x=>x.u===id).reduce((a,x)=>a+(x.vis||0),0);return `<div class="pn"><h3>用户（${p.users.length}）</h3>${p.users.map(u=>`<div class="kv" style="align-items:flex-start"><span style="font-size:14px"><b>${esc(u.name)}</b> ${u.adm?'<span class="tg">管理员</span>':''}${u.ban?'<span class="tg u">已停用</span>':''}<br><small class="mu">${esc(u.ph)}<br>注册 ${tmz(u.ct)}<br>最近登录 ${tmz(u.ll)}<br>最近活跃 ${tmz(u.la)}<br>累计 ${f(sv(u.id))} 字 · 今日 ${f(u.fd===t?u.fu:0)} 字 · 余额 ¥${f(u.bal)}</small></span><span style="display:grid;gap:6px"><button class="btn2" style="min-height:34px" data-a="lgu" data-id="${u.id}">看记录</button><button class="btn2" style="min-height:34px" data-a="uadd" data-id="${u.id}">加余额</button>${u.adm?'':`<button class="btn2" style="min-height:34px;color:#ff6b6b" data-a="uban" data-id="${u.id}">${u.ban?'恢复':'停用'}</button>`}</span></div>`).join('')}</div>`},
+logPn=()=>{const p=PL(),E=p.events.filter(e=>(!LGF.t||e.t===LGF.t)&&(!LGF.u||e.u===LGF.u)).slice(-40).reverse(),un=LGF.u?p.users.find(x=>x.id===LGF.u):null;return `<div class="pn"><h3>访问与操作记录</h3><div class="chips"><button class="chip${LGF.t?'':' on'}" style="--c:var(--ac)" data-a="lgt" data-c="">全部</button>${EVT.map(c=>`<button class="chip${LGF.t===c?' on':''}" style="--c:var(--ac)" data-a="lgt" data-c="${c}">${c}</button>`).join('')}</div>${un?`<div class="mu" style="font-size:13px;margin-bottom:8px">只看：${esc(un.name)} ${esc(un.ph)} <a class="lk" data-a="lgu" data-id="">取消</a></div>`:''}${E.map(e=>`<div class="kv" style="align-items:flex-start"><span class="mu" style="font-size:12px;min-width:92px">${tmz(e.ts)}</span><span style="text-align:right;font-size:13px"><b>${esc(e.t)}</b> ${esc(unm(p,e.u))}<br><small class="mu">${esc(e.d)}</small></span></div>`).join('')||'<div class="mu" style="font-size:13px">暂无记录</div>'}<div class="mu" style="font-size:12px;margin-top:6px">共 ${p.events.length} 条，只显示最近 40 条。</div></div>`},
+compPn=()=>{const p=PL();return `<div class="pn"><h3>合规与导出</h3><div class="lb">记录保留天数（不能低于 183 天，即半年）</div><div class="row"><input id="kp" type="number" value="${p.cfg.keep}"><button class="btn2" data-a="kpsv">保存</button></div><div class="row" style="margin:10px 0 0"><button class="btn2" style="flex:1" data-a="exu">导出用户</button><button class="btn2" style="flex:1" data-a="exl">导出操作记录</button><button class="btn2" style="flex:1" data-a="exa">导出用量</button></div><div class="mu" style="font-size:12px;margin-top:8px;line-height:1.7">现在这些记录只存在这台手机里，只能用来预演界面。真正能用于合规的记录（带 IP、不可篡改、至少保存半年）要在服务器上做。聊天内容默认不保存，只记“违规词命中”的那一句。</div></div>`};
+function acctX(a,ds,p,u){
+ if(a==='lgt'){LGF.t=ds.c;render()}
+ else if(a==='lgu'){LGF.u=ds.id||'';render()}
+ else if(a==='uban'){const w=p.users.find(x=>x.id===ds.id);if(w&&!w.adm){w.ban=w.ban?0:1;p.events.push({ts:Date.now(),u:u.id,t:'管理操作',d:(w.ban?'停用 ':'恢复 ')+w.ph});PW(p);render()}}
+ else if(a==='kpsv'){p.cfg.keep=Math.max(183,parseInt($('kp').value)||183);PW(p);render();toast('已保存')}
+ else if(a==='exu')csvDl('用户',[['昵称','手机号','注册时间','最近登录','最近活跃','累计字数','余额','状态','角色'],...p.users.map(w=>[w.name,w.ph,tmz(w.ct),tmz(w.ll),tmz(w.la),p.log.filter(x=>x.u===w.id).reduce((t,x)=>t+(x.vis||0),0),w.bal,w.ban?'停用':'正常',w.adm?'管理员':'用户'])]);
+ else if(a==='exl')csvDl('操作记录',[['时间','用户','手机号','类型','详情'],...p.events.map(e=>{const w=p.users.find(x=>x.id===e.u);return[tmz(e.ts),w?w.name:'游客',w?w.ph:'',e.t,e.d]})]);
+ else if(a==='exa')csvDl('AI用量',[['时间','用户','手机号','对象','字数','免费字数','付费字数','扣费元','tokens'],...p.log.map(e=>{const w=p.users.find(x=>x.id===e.u);return[tmz(e.ts),w?w.name:'',w?w.ph:'',e.mode==='gf'?'慧小小':'慧管家',e.vis,e.fp,e.pp,+((e.fee||0).toFixed(4)),e.tok]})]);
+ else return false;return true}
+const STG=['刚认识','熟起来','暧昧期'],BYE=/拜拜|再见|晚安|睡了|不聊了|先这样|先不聊|我去忙|去忙了|不说了|走了/,
+STT=['你们刚认识不久：保持一点距离感，嘴硬、好奇、爱逗，但别太熟络，也别暧昧过头。','你们已经熟起来了：会互相损、有点专属称呼，轻度暧昧可以有，话说一半留一半。','你们处在暧昧期：早就不是单纯朋友，两个人心里都清楚，只是谁都没挑明。互相试探、互相撩，气场带点甜，但最后那道线谁都不主动跨。'],
+EX=['被夸：行了行了，知道你嘴甜。……再说一句我听听。','被撩：哟，今天吃糖了？这么会说。','他累了：看你这样子就知道没睡好。先坐下，喝口水，我又不会跑。','损他：你这记性，欠账记得比我生日还牢，真行。','岔开：你想哪儿去了～今天不聊这个。','催睡：几点了你心里没数？明天店还开不开，睡。','问生意：今天店里咋样，别跟我说“还行”俩字，说细点。','被说像真人：我也希望自己是个人类，这样就能去你店里抓你偷懒了。','被问是不是女朋友：我是你的慧小小呀，名分这事……先欠着。','他要走：这就走？再陪我聊两句嘛。……行吧，去吧，晚点记得回我。','他不开心：谁惹你了，说，我替你记着。','他炫耀：行，算你厉害一回。我记下了，下次你自己别忘了。','他生意不好：先别急着愁。说说看，是人少了，还是货不对？'];
+function relInit(){D.rel=D.rel||{aff:0,first:0,days:[],msgs:0,mood:[],sl:'',ss:0,sr:0,byeN:0,lastT:0,pq:''};return D.rel}
+function relStage(){const r=relInit(),d=r.days.length;return r.aff>=45&&d>=14?2:(r.aff>=15&&d>=4?1:0)}
+function relDay(){const r=relInit();return r.first?Math.floor((Date.now()-r.first)/864e5)+1:1}
+function relUpdate(m,rd){const r=relInit(),now=Date.now(),t=today();if(!r.first)r.first=now;if(!r.days.includes(t))r.days.push(t);if(r.days.length>400)r.days.shift();r.msgs++;
+ if(r.lastT){const g=(now-r.lastT)/864e5;if(g>7)r.aff=Math.max(0,r.aff-Math.min(5,(g-7)*.5))}
+ if(!r.gd||r.gd.d!==t)r.gd={d:t,v:0};const dep=Math.min(2,Math.max(0,+(rd&&rd.dep)||0)),gain=Math.min(6-r.gd.v,.4+dep*.5+(m.length>20?.3:0));if(gain>0){r.aff=Math.min(100,r.aff+gain);r.gd.v+=gain}
+ if(rd&&rd.mood){r.mood.push(String(rd.mood).slice(0,4));if(r.mood.length>5)r.mood.shift()}
+ if(!r.ss||now-r.lastT>30*6e4){r.ss=now;r.sr=0}r.lastT=now;r.byeN=BYE.test(m)?r.byeN+1:0}
+function hintNow(m){const r=relInit(),h=new Date().getHours(),now=Date.now(),o=[];
+ if((h>=23||h<5)&&r.sl!==today()){o.push('现在是深夜'+h+'点：自然地催他早点睡，一次就够，别反复唠叨');r.sl=today()}
+ if(r.ss&&now-r.ss>90*6e4&&!r.sr){o.push('你们已经聊了很久了：自然地提一句让他歇会儿，或者去看看店');r.sr=1}
+ if(BYE.test(m))o.push(r.byeN<1?'他好像要走了：可以半真半假地挽留一次（比如再陪你聊两句、撒个娇），不要拿愧疚或威胁，他坚持就爽快放他走并道别':'他坚持要走：痛快放他走，说句道别的话');
+ const mo=r.mood.slice(-3);if(mo.length===3&&mo.every(x=>/累|烦|低|难/.test(x)))o.push('他最近几次情绪都不高：多一点温柔和倾听，少开玩笑');
+ if(m.length<=4&&D.chat.gf.slice(-6).filter(x=>x.r==='u'&&x.c.length<=4).length>=3)o.push('他最近几句都很短，可能累了或不想聊：少追问，简短回应');
+ return o}
+function bizBrief(){const t=today(),o=M(t.slice(0,7)),pm=M(sh(t.slice(0,7),-1));let w=0,wp=0;for(let i=0;i<7;i++){w+=D.rev[ago(i)]||0;wp+=D.rev[ago(i+7)]||0}return `本月营业额${f(o.rev)}、进货${f(o.b)}、开销${f(o.ex)}（上月营业额${f(pm.rev)}）；近7天营业额${f(w)}，前7天${f(wp)}；欠款${f(sum(D.buy.filter(r=>r.m==='none')))}。`}
+function proGf(L){const r=relInit(),h=new Date().getHours(),t=today();if(D.cfg.gq===t||r.pq===t||h<9||h>=18||!r.msgs||Date.now()-r.lastT<2*36e5||!(D.cfg.shop||D.cfg.ind))return;r.pq=t;const y=D.rev[ago(1)],Q=D.cfg.shareBiz&&y!=null?['昨天的账我偷偷看了一眼，今天呢，生意怎么样？别只回我“还行”。','我看了眼你昨天的生意。今天店里咋样？说说。']:['今天店里咋样？生意还行吗，说细点。','开门没？今天生意怎么样，跟我说说。'];L.push({r:'a',c:Q[Math.floor(Math.random()*Q.length)],ch:['挺好的','一般般','不太行','你帮我看看']});save()}
+function priceUp(){const t=today(),A={};D.buy.filter(r=>r.it).sort((a,b)=>(a.ts||0)-(b.ts||0)).forEach(r=>r.it.forEach(i=>{if(!(i.p>0))return;const k=i.n+'|'+(i.u||''),o=A[k];if(r.d===t&&o&&o.d!==t&&i.p>o.p*1.15)A[k+'!']={n:i.n,u:i.u,p:i.p,o:o.p};A[k]={p:i.p,d:r.d}}));const h=Object.keys(A).filter(k=>k.endsWith('!')).map(k=>A[k])[0];return h?h.n+' 今天 '+f(h.p)+'/'+(h.u||'份')+'，上次是 '+f(h.o)+'，涨了 '+Math.round((h.p/h.o-1)*100)+'%。':''}
+function proBiz(L){if(realN()<3)return;const c=D.cfg,t=today(),h=new Date().getHours();c.pb=c.pb||{};const P=c.pb;wkRep(L,P,t,h);
+ if(h>=20&&P.sum!==t){const b=D.buy.filter(x=>x.d===t),e=D.exp.filter(x=>x.d===t),rv=D.rev[t];if(b.length||e.length||rv!=null){P.sum=t;L.push({r:'a',c:'收摊小结 🧾\n今天记了 '+(b.length+e.length+(rv!=null?1:0))+' 笔：营业额 '+f(rv||0)+'，进货 '+f(sum(b)||0)+'，开销 '+f(sum(e)||0)+'。'+(rv!=null?'':'\n还没记营业额，要补吗？'),ch:rv!=null?['存个备忘','看看本月进货','没有了，谢谢']:['今天营业额是…','没卖多少','存个备忘']});save()}}
+ if(P.pr!==t){const hit=priceUp();if(hit){P.pr=t;L.push({r:'a',c:'提醒一下 📈 '+hit,ch:['换个供货商怎么样','我知道了','看看本月进货']});save()}}
+ if(P.idle!==t){const last=[...D.buy.map(x=>x.d),...D.exp.map(x=>x.d),...Object.keys(D.rev)].filter(x=>x<=t).sort().pop();if(last){const g=Math.round((Date.parse(t)-Date.parse(last))/864e5);if(g>=3&&g<30){P.idle=t;L.push({r:'a',c:'有 '+g+' 天没记账了，是太忙，还是没生意？先别急着补，告诉我今天的就行。',ch:['太忙了','最近生意差','今天营业额是…']});save()}}}}
+const EMO=/心情|难过|伤心|想你|喜欢你|爱你|谈恋爱|失恋|无聊|陪我聊|讲个笑话|你喜欢|你几岁|你多大|有对象/,DAT=/帮我记|记一笔|记账|查账|对账|导出|充值|余额|报表/,
+HO=['这个得去隔壁找慧小小聊，她最会陪人了～','聊心情这块不归我管，找隔壁的慧小小吧，她专门管这个。','这不是我的活儿，隔壁慧小小比我懂，去找她。'],
+HG=['账上的事我可不懂，去找慧管家，他专门管这个。','记账查账这些找慧管家，别来为难我～','数据这种东西我看着就头大，找慧管家去。'];
+function ctxMore(){const t=today(),d7=[];for(let i=6;i>=0;i--){const d=ago(i);d7.push(d.slice(5)+':'+(D.rev[d]!=null?f(D.rev[d]):'-'))}
+ const m=t.slice(0,7),C={};D.exp.filter(x=>x.d.startsWith(m)).forEach(x=>C[x.c]=(C[x.c]||0)+x.a);const cs=Object.entries(C).sort((a,b)=>b[1]-a[1]).slice(0,5).map(x=>x[0]+f(x[1])).join('、')||'无';
+ const W=[[],[],[],[],[],[],[]];Object.keys(D.rev).filter(k=>!(D.dmRev||[]).includes(k)).forEach(k=>W[new Date(k).getDay()].push(D.rev[k]));const wk=W.map((a,i)=>a.length?'周'+NW[i]+f(a.reduce((x,y)=>x+y,0)/a.length):'').filter(Boolean).join('、')||'无';
+ const P={};D.buy.filter(r=>r.it).sort((a,b)=>(a.ts||0)-(b.ts||0)).forEach(r=>r.it.forEach(i=>{if(i.p>0){(P[i.n]=P[i.n]||{})[r.s]=i.p+(i.u?'/'+i.u:'')}}));const pr=Object.entries(P).slice(0,8).map(([n,o])=>n+'('+Object.entries(o).slice(0,3).map(([s,p])=>s+' '+p).join('，')+')').join('；')||'无';
+ return `近7天营业额：${d7.join(' ')}。本月开销分类：${cs}。周几平均营业额：${wk}。常买品各供货商最近价：${pr}。`}
+function snapTake(){D.cfg.snap={b:D.buy.map(x=>x.id),e:D.exp.map(x=>x.id),m:D.memo.map(x=>x.id),md:D.memo.filter(x=>x.x).map(x=>x.id),s:D.sup.map(x=>x.n),r:Object.assign({},D.rev),dr:(D.dmRev||[]).slice()}}
+function undoLast(){const s=D.cfg.snap;if(!s)return false;D.buy=D.buy.filter(x=>s.b.includes(x.id));D.exp=D.exp.filter(x=>s.e.includes(x.id));D.memo=D.memo.filter(x=>s.m.includes(x.id));D.memo.forEach(m=>{m.x=s.md.includes(m.id)?1:0});D.sup=D.sup.filter(x=>s.s.includes(x.n)||D.buy.some(b=>b.s===x.n));D.rev=s.r;D.dmRev=s.dr;D.cfg.snap=null;save();return true}
+function wkRep(L,P,t,h){if(new Date().getDay()!==1||P.wk===t||h<7)return;const ws=a=>{let r=0,b=0,e=0;for(let i=a;i<a+7;i++){const d=ago(i);r+=D.rev[d]||0;b+=(sum(D.buy.filter(x=>x.d===d))||0);e+=(sum(D.exp.filter(x=>x.d===d))||0)}return{r,b,e}},w1=ws(1),w0=ws(8);if(w1.r+w1.b+w1.e<=0)return;P.wk=t;const dl=w0.r?Math.round((w1.r/w0.r-1)*100):null;L.push({r:'a',c:'上周小结 📅\n营业额 '+f(w1.r)+(dl!=null?'（比前一周'+(dl>=0?'多':'少')+Math.abs(dl)+'%）':'')+'，进货 '+f(w1.b)+'，开销 '+f(w1.e)+'。\n想让我挑出最值得留意的一点吗？',ch:['挑最值得留意的','看看本月进货','不用了']});save()}
+const homeGf=()=>D.cfg.gf&&me()?`<div class="pn" data-a="gogf" style="padding:14px 16px;display:flex;justify-content:space-between"><b>💗 ${esc(D.cfg.gn)}</b><span class="mu">陪你聊聊天 ›</span></div>`:'';
+function render(){pvLog();document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.t===tab));$('v').innerHTML={h:vH,a:vA,m:vM,d:vD,ai:vAI,q:vQ,adm:vAdm}[tab]()}
+const go=t=>{tab=t;render();scrollTo(0,0);const v=$('v');v.classList.remove('fx');void v.offsetWidth;v.classList.add('fx')},num=id=>parseFloat($(id).value),qa=s=>document.querySelectorAll(s),
+cl=()=>{E=null;$('sh').classList.remove('on')};
+function del(k,id){let u;
+ if(k==='b'){u={b:D.buy.filter(r=>String(r.id)===id)};D.buy=D.buy.filter(r=>String(r.id)!==id)}
+ else if(k==='e'){u={e:D.exp.filter(r=>String(r.id)===id)};D.exp=D.exp.filter(r=>String(r.id)!==id)}
+ else if(k==='m'){u={m:D.memo.filter(r=>String(r.id)===id)};D.memo=D.memo.filter(r=>String(r.id)!==id)}
+ else if(k==='v'){u={v:[id,D.rev[id]]};delete D.rev[id]}
+ else{u={s:D.sup.filter(s=>s.n===id),b:D.buy.filter(r=>r.s===id)};D.sup=D.sup.filter(s=>s.n!==id);D.buy=D.buy.filter(r=>r.s!==id)}
+ UD=u;save();cl();render();toast('已删除',1)}
+const uniq=(a,c)=>[...new Set([c,...a].filter(Boolean))];
+function edOpen(k,id){let r,h;
+ if(k==='b')r=D.buy.find(x=>String(x.id)===id);else if(k==='e')r=D.exp.find(x=>String(x.id)===id);else if(k==='v')r={d:id,a:D.rev[id]};else r=D.memo.find(x=>String(x.id)===id);
+ if(!r)return;E={t:k,id,m:r.m&&r.m!=='?'?r.m:'wx'};
+ if(k==='b')h=`<h3>进货记录</h3><select id="xs" style="margin-bottom:12px">${D.sup.map(s=>`<option${s.n===r.s?' selected':''}>${esc(s.n)}</option>`).join('')}</select><div class="row"><input id="xa" type="number" inputmode="decimal" value="${r.a}" placeholder="金额"><input id="xq" type="number" inputmode="decimal" value="${r.q||''}" placeholder="箱数"><input id="xn" value="${esc(r.t||'')}" placeholder="备注"></div><div class="lb">日期和时间</div><div class="row"><input id="xd" type="date" value="${r.d}"><input id="xt" type="time" value="${r.at?r.at.slice(11):''}"></div><div class="lb">付款方式</div><div class="seg" id="xm">${xmch()}</div>${r.pa?`<div class="mu" style="font-size:13px;margin-bottom:6px">付款于 ${r.pa.slice(5).replace('T',' ')}</div>`:''}${r.ts?`<div class="mu" style="font-size:12px;margin-bottom:8px">登记于 ${fts(r.ts)}</div>`:''}${r.m==='none'?`<div style="border:1.5px dashed var(--ln);border-radius:14px;padding:12px;margin-bottom:12px"><div style="font-size:14px;margin-bottom:8px"><b>这笔付钱了？</b> 选付款时间和方式：</div><div class="row"><input id="pd" type="date" value="${today()}"><input id="pt" type="time" value="${nowHM()}"></div><div class="chips" style="margin:0">${PAY.map(k=>`<button class="chip" style="--c:var(--ac)" data-pay="${k}">${MN[k]}</button>`).join('')}</div></div>`:''}<a class="lk" data-a="gs" data-n="${esc(r.s)}">查看这家供货商的全部记录 ›</a>`;
+ else if(k==='e')h=`<h3>开销记录</h3><select id="xc" style="margin-bottom:12px">${uniq(D.xcats,r.c||'其他').map(c=>`<option${c===(r.c||'其他')?' selected':''}>${esc(c)}</option>`).join('')}</select><div class="row"><input id="xa" type="number" inputmode="decimal" value="${r.a}" placeholder="金额"><input id="xd" type="date" value="${r.d}"></div><input id="xn" value="${esc(r.t||'')}" placeholder="备注">`;
+ else if(k==='v')h=`<h3>营业额</h3><div class="row"><input id="xd" type="date" value="${r.d}"><input id="xa" type="number" inputmode="decimal" value="${r.a}" placeholder="营业额"></div>`;
+ else h=`<h3>备忘</h3><input id="xn" value="${esc(r.t)}" style="margin-bottom:12px"><div class="row"><select id="xc">${uniq(D.mcats,r.c).map(c=>`<option${c===r.c?' selected':''}>${esc(c)}</option>`).join('')}</select><input id="xd" type="date" value="${r.d||''}"></div>`;
+ $('sh').innerHTML='<div>'+h+`<div class="row" style="margin-top:14px"><button class="btn2" data-a="xdel">删除</button><button class="btn2" data-a="xcl">取消</button><button class="btn" style="flex:1" data-a="xsv">保存</button></div></div>`;$('sh').classList.add('on')}
+function doneOpen(m){E={t:'md',id:String(m.id)};$('sh').innerHTML=`<div><h3>办完了：${esc(m.t)}</h3><div class="mu" style="font-size:13px;margin-bottom:12px">花了多少钱？自己做的、没花钱，就留空，不会记入开销。</div><div class="lb">日期</div><input id="xd" type="date" value="${today()}" style="margin-bottom:12px"><div class="lb">金额（选填）</div><input id="xa" type="number" inputmode="decimal" placeholder="花了多少钱" style="margin-bottom:14px"><div class="row"><button class="btn2" data-a="xcl">取消</button><button class="btn" style="flex:1" data-a="xsv">完成</button></div></div>`;$('sh').classList.add('on')}
+function mpOpen(){const y=+ym.slice(0,4),m=+ym.slice(5);$('sh').innerHTML=`<div><h3>选择月份</h3><div class="row"><button class="btn2" data-a="yp">‹</button><input id="my" type="number" inputmode="numeric" value="${y}" style="text-align:center;font-weight:700"><button class="btn2" data-a="yn">›</button></div><div class="mu" style="font-size:12px;margin:-4px 0 0 2px">年份可以直接输入，再点下面的月份</div><div class="mg">${[1,2,3,4,5,6,7,8,9,10,11,12].map(n=>`<button class="${n===m?'on':''}" data-mm="${n}">${n}月</button>`).join('')}</div><div class="row" style="margin:0"><button class="btn2" style="flex:1" data-a="mtoday">回到本月</button><button class="btn2" style="flex:1" data-a="xcl">取消</button></div></div>`;$('sh').classList.add('on')}
+function xsave(){const T=E.t,v=$('xa')?num('xa'):0;
+ if(T==='b'){const r=D.buy.find(x=>String(x.id)===E.id);if(!(v>0))return toast('请输入金额');const d=$('xd').value||r.d;Object.assign(r,{s:$('xs').value,a:v,q:num('xq')||0,d,at:d+'T'+($('xt').value||'00:00'),m:E.m,t:$('xn').value.trim()});if(E.m==='none')delete r.pa}
+ else if(T==='e'){const r=D.exp.find(x=>String(x.id)===E.id);if(!(v>0))return toast('请输入金额');Object.assign(r,{a:v,d:$('xd').value||r.d,c:$('xc').value,t:$('xn').value.trim()})}
+ else if(T==='v'){if(!(v>=0))return toast('请输入营业额');const d=$('xd').value||E.id;delete D.rev[E.id];D.rev[d]=v;if(D.dmRev)D.dmRev=D.dmRev.filter(k=>k!==E.id&&k!==d)}
+ else if(T==='md'){const m=D.memo.find(x=>String(x.id)===E.id),d=$('xd').value||today();m.x=1;let msg='已完成';if(v>0){const id=Date.now();D.exp.push({id,d,a:v,c:m.c,t:m.t});m.eid=id;msg='已完成，并记入开销 '+f(v)+' 元'}save();cl();render();return toast(msg)}
+ else{const r=D.memo.find(x=>String(x.id)===E.id),s=$('xn').value.trim();if(!s)return toast('请输入事项');Object.assign(r,{t:s,c:$('xc').value,d:$('xd').value})}
+ save();cl();render();toast('已保存')}
+const SEL='[data-a],[data-open],[data-v],[data-tp],[data-m],[data-q],[data-x],[data-em],[data-pay],[data-sub],[data-qt],[data-mm]';
+const H=e=>{const t=e.target.closest(SEL);if(!t){if(e.target.id==='sh')cl();return}const a=t.dataset.a,ds=t.dataset;if(aiH(a,ds))return;
+ if(ds.open){const i=ds.open.indexOf(':');edOpen(ds.open.slice(0,i),ds.open.slice(i+1));return}
+ if(ds.pay&&E){const r=D.buy.find(x=>String(x.id)===E.id);r.m=ds.pay;r.pa=($('pd').value||today())+'T'+($('pt').value||nowHM());save();cl();render();toast('已标记为'+MN[ds.pay]+'付款');return}
+ if(ds.mm){const y=+$('my').value;if(!(y>=2000&&y<=2100))return toast('请输入正确的年份');ym=y+'-'+p2(ds.mm);cl();render();return}
+ if(ds.sub){sub=ds.sub;render();return}
+ if(ds.qt){tp=ds.qt;cd=today();sub='e';go('a');return}
+ if(ds.v!==undefined){sel=ds.v;qa('.chip[data-v]').forEach(c=>c.classList.toggle('on',c.dataset.v===sel));return}
+ if(ds.tp){tp=ds.tp;qa('#tp button').forEach(c=>c.classList.toggle('on',c.dataset.tp===tp));$('fm').innerHTML=formH();return}
+ if(ds.m){meth=ds.m;qa('#mc button').forEach(c=>c.classList.toggle('on',c.dataset.m===meth));return}
+ if(ds.em){E.m=ds.em;qa('#xm button').forEach(c=>c.classList.toggle('on',c.dataset.em===E.m));return}
+ if(ds.q){mc=ds.q;qa('.chip[data-q]').forEach(c=>c.classList.toggle('on',c.dataset.q===mc));return}
+ if(ds.x){xc=ds.x;qa('.chip[data-x]').forEach(c=>c.classList.toggle('on',c.dataset.x===xc));return}
+ if(a==='tgl'){OP[ds.k]=!OP[ds.k];t.closest('.acc').classList.toggle('open')}
+ else if(a==='rev'){const v=num('ba');if(!(v>=0))return toast('请输入营业额');D.rev[cd]=v;if(D.dmRev)D.dmRev=D.dmRev.filter(k=>k!==cd);ym=cd.slice(0,7);save();render();toast('已保存营业额')}
+ else if(a==='buy'){const v=num('ba');if(!sel||!(v>0))return toast('请选择供货商并输入金额');D.buy.push({id:Date.now(),d:cd,at:cd+'T'+($('bt').value||nowHM()),ts:Date.now(),s:sel,a:v,m:meth,...qu(),...itm(),t:$('bn').value.trim()});ym=cd.slice(0,7);save();render();toast('已记录进货')}
+ else if(a==='exp'){const v=num('ba');if(!(v>0))return toast('请输入金额');D.exp.push({id:Date.now(),d:cd,a:v,c:xc,t:$('bn').value.trim()});ym=cd.slice(0,7);save();render();toast('已记录开销')}
+ else if(a==='hist'){fr='30';ft='all';fs='';lim=40;sub='q';go('a')}
+ else if(a==='gall'){fs='';lim=40;render()}
+ else if(a==='more'){lim+=40;render()}
+ else if(a==='gt')go(ds.t);
+ else if(a==='jd'){cd=ds.d;tp='v';sub='e';go('a')}
+ else if(a==='pick'){cd=today();sel=ds.n;tp='b';sub='e';go('a')}
+ else if(a==='gs'){cl();fs=ds.n;ft='all';lim=40;if(ds.mo){fr='c';fa=ds.mo+'-01';fb=ld(ds.mo)}else fr='all';sub='q';go('a')}
+ else if(a==='gq'){fs='';ft=ds.t;lim=40;fr='c';fa=ym+'-01';fb=ld(ym);sub='q';go('a')}
+ else if(a==='debt'){cl();fs=ds.n||'';ft='due';fr='all';lim=40;sub='q';go('a')}
+ else if(a==='gm'){fs='';ft='all';lim=40;fr='c';fa=ds.mo+'-01';fb=ld(ds.mo);sub='q';go('a')}
+ else if(a==='mpick')mpOpen();
+ else if(a==='yp'){$('my').value=(+$('my').value||+ym.slice(0,4))-1}
+ else if(a==='yn'){$('my').value=(+$('my').value||+ym.slice(0,4))+1}
+ else if(a==='mtoday'){ym=today().slice(0,7);cl();render()}
+ else if(a==='cp'){const b=$('bk');b.select();let ok=false;try{ok=document.execCommand('copy')}catch(x){}toast(ok?'已复制，去微信粘贴发送':'请长按文本框，全选后复制')}
+ else if(a==='cpt')toast(cpy(TEL)?'号码已复制':'请手动记下：'+TEL);
+ else if(a==='addsup'){const n=$('nc').value.trim();if(!n||D.sup.some(s=>s.n===n))return toast('名称为空或已存在');D.sup.push({n});sel=n;save();render();toast('已添加')}
+ else if(a==='dsup')del('s',ds.n);
+ else if(a==='cadd'){const k=ds.k,n=$('ci_'+k).value.trim();if(!n||D[k].includes(n))return toast('名称为空或已存在');D[k].push(n);save();render();toast('已添加')}
+ else if(a==='cdel'){const k=ds.k;UD={cat:[k,[...D[k]]]};D[k]=D[k].filter(x=>x!==ds.n);save();render();toast('已删除分类',1)}
+ else if(a==='xlsx'){try{const bl=xlsx(),u=URL.createObjectURL(bl),l=document.createElement('a');l.href=u;l.download='慧记账数据_'+today()+'.xlsx';document.body.appendChild(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);toast('已导出 Excel 表格；没弹出下载的话，请点“复制表格内容”')}catch(x){toast('导出失败，请点“复制表格内容”')}}
+ else if(a==='tsv'){toast(cpy(tsv())?'表格内容已复制，到 WPS / Excel 里粘贴':'复制失败，请换手机浏览器打开')}
+ else if(a==='dmask')confirmOpen('清除示例数据？','只会删除示例内容，你自己记的数据不受影响。清除后可以点“撤销”恢复。','dmclear','清除示例');
+ else if(a==='allask')confirmOpen('清空所有数据？','所有进货、营业额、开销、备忘和供货商都会被删除。建议先备份。清空后可以点“撤销”恢复。','allclear','全部清空');
+ else if(a==='dmclear'){UD={all:JSON.stringify(D)};dmClear();save();cl();render();toast('示例数据已清除',1)}
+ else if(a==='allclear'){UD={all:JSON.stringify(D)};D.sup=[];D.rev={};D.buy=[];D.exp=[];D.memo=[];D.dmRev=[];D.dmAt='';D.noDemo=1;save();cl();render();toast('已清空所有数据',1)}
+ else if(a==='dmload'){delete D.noDemo;loadDemo();save();render();toast('已载入示例数据')}
+ else if(a==='addm'){const s=$('mx').value.trim();if(!s)return toast('请输入事项');D.memo.push({id:Date.now(),t:s,d:$('md').value,c:mc,x:0});save();render();toast('已添加')}
+ else if(a==='tg'){const m=D.memo.find(x=>String(x.id)===ds.id);if(!m)return;if(m.x){m.x=0;if(m.eid){D.exp=D.exp.filter(r=>r.id!==m.eid);m.eid=0}save();render();toast('已恢复为待办')}else doneOpen(m)}
+ else if(a==='pm'){ym=sh(ym,-1);render()}else if(a==='nm'){ym=sh(ym,1);render()}
+ else if(a==='bx'){const b=$('bk');b.value=JSON.stringify(D);b.select();let ok=false;try{ok=document.execCommand('copy')}catch(x){}if(ok){D.lb=today();save()}toast(ok?'已复制，请粘贴到备忘录保存':'请长按文本框，全选后复制')}
+ else if(a==='bi'){try{const j=JSON.parse($('bk').value);if(!Array.isArray(j.sup)||!Array.isArray(j.buy)||!Array.isArray(j.exp)||!j.rev)throw 0;D=j;mig();save();toast('已恢复');render()}catch(x){toast('备份内容不正确')}}
+ else if(a==='xsv'&&E)xsave();
+ else if(a==='xdel'&&E)del(E.t,E.id);
+ else if(a==='xcl')cl()};
+$('v').onclick=H;$('sh').onclick=H;
+const nv=document.querySelector('nav');nv.innerHTML=[['h','home','首页'],['a','edit','记账'],['ai','chat','管家'],['q','shop','生意圈'],['d','set','设置']].map(x=>`<button data-t="${x[0]}"><i>${ic(x[1])}</i>${x[2]}</button>`).join('');
+nv.onclick=e=>{const t=e.target.closest('button');if(t){if(t.dataset.t==='a'&&tab!=='a')sub='e';go(t.dataset.t)}};
+$('ts').onclick=e=>{if(e.target.id==='ud'&&UD){const u=UD;UD=null;if(u.b)D.buy.push(...u.b);if(u.e)D.exp.push(...u.e);if(u.m)D.memo.push(...u.m);if(u.s)D.sup.push(...u.s);if(u.v&&u.v[1]!=null)D.rev[u.v[0]]=u.v[1];if(u.cat)D[u.cat[0]]=u.cat[1];if(u.all){D=JSON.parse(u.all);mig()}save();$('ts').classList.remove('s');render()}};
+$('v').onchange=e=>{const t=e.target;
+ if(t.id==='dt'&&t.value){cd=t.value;$('dl').innerHTML=dayH();if(tp==='v')$('fm').innerHTML=formH()}
+ else if(t.id==='fa'){if(t.value){fa=t.value;lim=40;render()}}
+ else if(t.id==='fb'){if(t.value){fb=t.value;lim=40;render()}}
+ else if(t.id==='fs'){fs=t.value;lim=40;render()}
+ else if(t.id==='fr'){fr=t.value;lim=40;if(fr==='c'){fa=fa||ago(6);fb=fb||today()}render()}
+ else if(t.id==='ft'){ft=t.value;lim=40;render()}
+ else if(t.classList.contains('g')){const s=D.sup.find(x=>x.n===t.dataset.s),g=parseFloat(t.value);if(s){if(g>0)s.g=g;else delete s.g;save();toast('已保存目标占比')}}};
+{if(FIRST||(!D.noDemo&&D.sup.length+D.buy.length+D.exp.length+D.memo.length+Object.keys(D.rev).length===0)){loadDemo();save()}dmShift();render();}
+</script>
+</body>
+</html>
